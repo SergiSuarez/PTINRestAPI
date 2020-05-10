@@ -1,7 +1,7 @@
 /* API per el projecte de VIA
-Autors: grup A2 de PTIN
+Autors: grup A2 i A4 de PTIN
 Any: 2019-2020
-Versió: beta, prototip
+Versió: RC1, release candidate
 */
 //------------Carreguem els móduls necesaris
 var express = require("express"); //framework web
@@ -9,8 +9,6 @@ var bodyParser  = require("body-parser"); // analitza el contingut del cos, per 
 var methodOverride = require("method-override"); //paquet que permet realitzar PUT
 var mongoose = require('mongoose'); //framework per base de datos MongoDB
 var http = require('http'); //framework permet utilizar peticiones http
-
-
 var app = express(); //Comencem a utilitzar express per utilitzat els métodes de la API a través de les peticions HTTP
 var router = express.Router(); //crea un objecte enrutador que habilita l us de GET, POST, PUT, DELETE
 
@@ -21,9 +19,6 @@ app.use(methodOverride());
 app.use(router);
 
 //Indiquem on estaran les routes, métodes bàsics de la API REST
-//routesA1=require('./routes/router_A1')(app);
-//routesA2=require('./routes/router_A2')(app);
-//routesA3=require('./routes/router_A3')(app);
 routesfog=require('./routes/router_fog')(app);
 
 //Intentem fer una connexio la nostre BDD de MongoDB amb l usuari admin
@@ -37,7 +32,7 @@ try {
 }catch(error){
   console.error(error);
 }
- // Iniciem el servidor de la API al port 3000
+ // Iniciem el servidor de la API al port 3001
 app.listen(3001, function() {
   console.log("Node server running on http://ip_del_host:3001");
 });

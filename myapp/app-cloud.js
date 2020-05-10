@@ -1,7 +1,7 @@
 /* API per el projecte de VIA
-Autors: grup A2 de PTIN
+Autors: grups A2 i A4 de PTIN
 Any: 2019-2020
-Versió: beta, prototip
+Versió: RC1, release candidate
 */
 //------------Carreguem els móduls necesaris
 var express = require("express"); //framework web
@@ -9,8 +9,6 @@ var bodyParser  = require("body-parser"); // analitza el contingut del cos, per 
 var methodOverride = require("method-override"); //paquet que permet realitzar PUT
 var mongoose = require('mongoose'); //framework per base de datos MongoDB
 var http = require('http'); //framework permet utilizar peticiones http
-
-
 var app = express(); //Comencem a utilitzar express per utilitzat els métodes de la API a través de les peticions HTTP
 var router = express.Router(); //crea un objecte enrutador que habilita l us de GET, POST, PUT, DELETE
 
