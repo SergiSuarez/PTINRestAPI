@@ -7,6 +7,11 @@ module.exports = function(app){
     // amb mongo db i la seva col·lecció persona
     var pasajero = require('../models/A4/pasajero');
     var billete = require('../models/A4/billetes');
+    var interes = require('../models/A4/intereses');
+    var negocios = require('../models/A4/negocios');
+    var ofertas = require('../models/A4/ofertas');
+    var tarjetas = require('../models/A4/tarjetas');
+    var vuelos = require('../models/A4/vuelos');
 //--------------------------------
 //---------------Funcions
     //Insertem una persona a la col.leccio
@@ -25,8 +30,26 @@ module.exports = function(app){
             username: req.body.username,
             password: req.body.password
         });
-        console.log("Añadido Usuario:", vpasajero.id_ticket);
+        console.log("Añadido Usuario:", vpasajero.id_user);
         vpasajero.save();
+        res.end();
+    };
+
+    nvuelo = function(req, res){
+        var vvuelo = new vuelos({
+            id: req.body.id, 
+            origen: req.body.origen,
+            destino: req.body.destino,
+            fecha: req.body.fecha,
+            hora: req.body.hora,
+            aerolinea: req.body.aerolinea,
+            puerta: req.body.puerta,
+            asientos_a: req.body.asientos_a,
+            asientos_t: req.body.asientos_t,
+            asientos: req.body.asientos
+        });
+        console.log("Añadido Vuelo:", vvuelo.id);
+        vvuelo.save();
         res.end();
     };
 
@@ -52,6 +75,83 @@ module.exports = function(app){
         res.end();
     };
 
+    //Afegir nou interés a la llista base d'interesos
+    ninteres = function(req, res){
+        var vinteres = new interes({
+            interes: req.body.interes
+        });
+        console.log("Añadido interés:", vinteres.interes);
+        vinteres.save();
+        res.end();
+    };
+
+    nnegocio = function(req, res){
+        var vnegocio = new negocios({
+            nombre: req.body.nombre,
+            tipo: req.body.tipo,
+            local: req.body.local,
+            descripcion: req.body.descripcion,
+            estado: req.body.estado,
+            logo: req.body.logo,
+            foto: req.body.foto,
+            valoracion: req.body.valoracion
+        });
+        console.log("Añadido Negocio: ", vnegocio.nombre);
+        vnegocio.save();
+        res.end();
+    };
+
+    noferta = function(req, res){
+        var voferta = new ofertas({
+            id_shop: req.body.id_shop,
+            descripcion: req.body.descripcion,
+            caducidad: req.body.caducidad,
+            publico: req.body.publico
+        });
+        console.log("Añadida Oferta: ", voferta.descripcion);
+        voferta.save();
+        res.send();
+    };
+
+    ntarjeta = function(req, res){
+        var vtarjeta = new tarjetas({
+            id_card: req.body.id_card,
+            id_user: req.body.id_user,
+            aerolinea: req.body.aerolinea,
+            millas: req.body.millas,
+            status: req.body.status,
+            caducidad: req.body.caducidad
+        });
+        console.log("Añadida tarjeta: ", vtarjeta.id_card);
+        vtarjeta.save();
+        res.send();
+    };
+
+    listinteres = function(req, res){
+        interes.find(function(err, inter){
+            res.send(inter);
+        });
+    };
+
+    listvuelos = function(req, res){
+        vuelos.find(function(err, flight){
+            res.send(flight);
+        });
+    };
+
+    listtarjetas = function(req, res){
+        tarjetas.find(function(err, cards){
+            res.send(cards);
+        });
+    };
+
+    listtarjetasbyuser = function(req, res){
+    //    console.log("Buscando tarjeta de: ", req.params.iduser);
+        tarjetas.find({id_user: req.params.iduser}, function(err, cards){
+            res.send(cards);
+        });
+    };
+
     //Busqueda de totes les persones de la col.leccio
     listpasajero = function(req, res){
         pasajero.find(function(err, people) {
@@ -66,10 +166,52 @@ module.exports = function(app){
         });
     };
 
+    listnegocios = function(req, res){
+        negocios.find(function(err, bizz) {
+            res.send(bizz);
+        });
+    };
+
+    listrestaurantes = function(req, res){
+        negocios.find({tipo: "Restaurante"}, function(error, bizz){
+            res.send(bizz);
+        });
+    };
+
+    listtiendas = function(req, res){
+        negocios.find({tipo: "Tienda"}, function(error, bizz){
+            res.send(bizz);
+        });
+    };
+
+    listofertas = function(req, res){
+        ofertas.find(function(error, bizz){
+            res.send(bizz);
+        });
+    };
+
+    listofertasbydate = function(req, res){
+        ofertas.find({caducidad: req.params.caducidad}, function(req, res){
+            res.send(bizz);
+        });
+    };
+
+    listvuelosbyordestdate = function(req, res){
+        vuelos.find({origen: req.params.origen, destino: req.params.destino, fecha:req.params.fecha}, function(error, flight){
+            res.send(flight)
+        })
+    };
+
     //Busqueda d una persona concreta per el seu _id
     findpasajero = (function(req, res) {
         pasajero.findOne({_id: req.params.id}, function(error, person) {
             res.send(person);
+        });
+    });
+
+    findvuelo = (function(req, res) {
+        vuelos.findOne({_id: req.params.id}, function(error, flight) {
+            res.send(flight);
         });
     });
 
@@ -80,29 +222,116 @@ module.exports = function(app){
         });   
     });
 
+    findnegocios = (function(req, res) {
+        negocios.findOne({_id: req.params.id}, function(error, bizz) {
+            res.send(bizz);
+        });   
+    });
+
+    findtarjetas = (function(req, res) {
+        tarjetas.findOne({_id: req.params.id}, function(error, cards) {
+            res.send(cards);
+        });   
+    });
+
     //Esborra un pasajero donant el seu _id
 	delpasajero = (function(req,res){
 		pasajero.deleteOne({_id: req.params.id}, function(error, person) {
+            console.log("Eliminado Pasajero:", req.params.id);
         	res.send(person);
+        })
+    });
+
+    delvuelo = (function(req,res){
+		vuelos.deleteOne({_id: req.params.id}, function(error, flight) {
+            console.log("Eliminado Vuelo:", req.params.id);
+        	res.send(flight);
+        })
+    });
+    
+    deltarjeta = (function(req,res){
+		tarjetas.deleteOne({_id: req.params.id}, function(error, cards) {
+            console.log("Eliminado Pasajero:", req.params.id);
+        	res.send(cards);
         })
 	});
 
     //Esborra un billete donant el seu _id
 	delbillete = (function(req,res){
 		billete.deleteOne({_id: req.params.id}, function(error, bill) {
+            console.log("Eliminado Billete:", req.params.id);
         	res.send(bill);
         });
-	});
+    });
+
+    delinteres = (function(req,res){
+		interes.deleteOne({_id: req.params.id}, function(error, inte) {
+            console.log("Eliminado Interés:", req.params.id);
+        	res.send(inte);
+        });
+    });
+
+    delnegocios = (function(req,res){
+		negocios.deleteOne({_id: req.params.id}, function(error, bizz) {
+            console.log("Eliminado Negocio:", req.params.id);
+        	res.send(bizz);
+        });
+    });
+
+    delofertas = (function(req,res){
+		ofertas.deleteOne({_id: req.params.id}, function(error, bizz) {
+            console.log("Eliminada Oferta:", req.params.id);
+        	res.send(bizz);
+        });
+    });
+    
     //Modifica els valors especificats d una persona identificada pel seu _id.
     //Els camps no especificats es mantindran igual
 	updatepasajero = (function(req,res){
 		pasajero.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
+            console.log("Actualizado pasajero: ", req.params.id);
             res.send(upd);
         });
     });
 
     updatebillete = (function(req,res){
 		billete.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
+            console.log("Actualizado billete: ", req.params.id);
+            res.send(upd);
+        });
+    });
+
+    updateinteres = (function(req,res){
+		interes.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
+            console.log("Actualizado interés: ", req.params.id);
+            res.send(upd);
+        });
+    });
+
+    updatevuelo = (function(req,res){
+		vuelos.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
+            console.log("Actualizado vuelo: ", req.params.id);
+            res.send(upd);
+        });
+    });
+
+    updatenegocios = (function(req,res){
+		negocios.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
+            console.log("Actualizado negocio: ", req.params.id);
+            res.send(upd);
+        });
+    });
+
+    updateoferta = (function(req,res){
+		ofertas.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
+            console.log("Actualizada oferta: ", req.params.id);
+            res.send(upd);
+        });
+    });
+
+    updatetarjeta = (function(req,res){
+		targetas.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
+            console.log("Actualizada targeta: ", req.params.id);
             res.send(upd);
         });
     });
@@ -116,20 +345,51 @@ module.exports = function(app){
 //inserim dades a la BDD
 app.post('/pasajero', npasajero);
 app.post('/billetes', nbillete);
+app.post('/intereses', ninteres);
+app.post('/negocios', nnegocio);
+app.post('/ofertas', noferta);
+app.post('/tarjetas', ntarjeta);
+app.post('/vuelos', nvuelo);
+
+
 //--------------------------------GET----------------
 //Obtenim dades de la BDD
 app.get('/pasajero', listpasajero);
 app.get('/billetes', listbillete);
+app.get('/intereses', listinteres);
+app.get('/negocios', listnegocios);
+app.get('/negocios/restaurantes', listrestaurantes);
+app.get('/negocios/tiendas', listtiendas);
+app.get('/ofertas', listofertas);
+app.get('/tarjetas', listtarjetas);
+app.get('/vuelos', listvuelos);
+app.get('/vuelos/:origen/:destino/:fecha', listvuelosbyordestdate);
+app.get('/ofertas/:caducidad', listofertasbydate);
+app.get('/tarjetas/:iduser', listtarjetasbyuser);
 app.get('/pasajero/:id', findpasajero);
-app.get('/billetes/:id', findbillete); 
+app.get('/billetes/:id', findbillete);
+app.get('/negocios/:id', findnegocios);
+app.get('/vuelos/:id', findvuelo);
+
 //--------------------------------DELETE----------------
 //esborrem dades de la BDD
 app.delete('/pasajero/:id', delpasajero);
 app.delete('/billetes/:id', delbillete);
+app.delete('/intereses/:id', delinteres);
+app.delete('/negocios/:id', delnegocios);
+app.delete('/ofertas/:id', delofertas);
+app.delete('/tarjetas/:id', deltarjeta);
+app.delete('/vuelos/:id', delvuelo);
 //--------------------------------PUT----------------
 //modifiquem dades de la BDD
 app.put('/pasajero/:id',updatepasajero);
 app.put('/billetes/:id', updatebillete);
+app.put('/intereses/:id', updateinteres);
+app.put('/negocios/:id', updatenegocios);
+app.put('/ofertas/:id', updateoferta);
+app.put('/tarjetas/:id', updatetarjeta);
+app.put('/vuelos/:id', updatevuelo);
+
 
 };
 
