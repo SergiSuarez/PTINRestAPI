@@ -3,8 +3,8 @@ module.exports = function(app){
 
 
 //----------------Variables globals
-    //Importem tot el schema de persona que hem creat a ../models/persona per tal de treballar
-    // amb mongo db i la seva col·lecció persona
+    //Importem tots els schemas de persona que es troben a ../models/A4/... per tal de treballar
+    // amb mongo db i la seva col·lecció corresponent
     var pasajero = require('../models/A4/pasajero');
     var billete = require('../models/A4/billetes');
     var interes = require('../models/A4/intereses');
@@ -14,7 +14,7 @@ module.exports = function(app){
     var vuelos = require('../models/A4/vuelos');
 //--------------------------------
 //---------------Funcions
-    //Insertem una persona a la col.leccio
+    //Nuevo pasajero
     npasajero = function(req, res){
         var vpasajero = new pasajero({
             id_user: req.body.id_user, 
@@ -34,7 +34,7 @@ module.exports = function(app){
         vpasajero.save();
         res.end();
     };
-
+    //Nuevo vuelo
     nvuelo = function(req, res){
         var vvuelo = new vuelos({
             id: req.body.id, 
@@ -53,7 +53,7 @@ module.exports = function(app){
         res.end();
     };
 
-    //Insertem un bitllet a la coleccio
+    //Nuevo billete
     nbillete = function(req, res){
         var vbillete = new billete({
             id_ticket: req.body.id_ticket,
@@ -75,7 +75,7 @@ module.exports = function(app){
         res.end();
     };
 
-    //Afegir nou interés a la llista base d'interesos
+    //Nuevo interés
     ninteres = function(req, res){
         var vinteres = new interes({
             interes: req.body.interes
@@ -85,6 +85,7 @@ module.exports = function(app){
         res.end();
     };
 
+    //Nuevo negocio
     nnegocio = function(req, res){
         var vnegocio = new negocios({
             nombre: req.body.nombre,
@@ -101,6 +102,7 @@ module.exports = function(app){
         res.end();
     };
 
+    //Nueva oferta
     noferta = function(req, res){
         var voferta = new ofertas({
             id_shop: req.body.id_shop,
@@ -113,6 +115,7 @@ module.exports = function(app){
         res.send();
     };
 
+    //Nueva tarjeta
     ntarjeta = function(req, res){
         var vtarjeta = new tarjetas({
             id_card: req.body.id_card,
@@ -127,24 +130,28 @@ module.exports = function(app){
         res.send();
     };
 
+    //Lista de intereses
     listinteres = function(req, res){
         interes.find(function(err, inter){
             res.send(inter);
         });
     };
 
+    //Lista de vuelos
     listvuelos = function(req, res){
         vuelos.find(function(err, flight){
             res.send(flight);
         });
     };
 
+    //Lista de tarjetas
     listtarjetas = function(req, res){
         tarjetas.find(function(err, cards){
             res.send(cards);
         });
     };
 
+    //Lista de tarjetas por usuario
     listtarjetasbyuser = function(req, res){
     //    console.log("Buscando tarjeta de: ", req.params.iduser);
         tarjetas.find({id_user: req.params.iduser}, function(err, cards){
@@ -152,63 +159,77 @@ module.exports = function(app){
         });
     };
 
-    //Busqueda de totes les persones de la col.leccio
+    //Lista de pasajeros
     listpasajero = function(req, res){
         pasajero.find(function(err, people) {
             res.send(people);
         });
     };
 
-    //Busqueda de tots els bitllets
+    //Lista de billetes
     listbillete = function(req, res){
         billete.find(function(err, bill) {
             res.send(bill);
         });
     };
 
+    //Lista de negocios
     listnegocios = function(req, res){
         negocios.find(function(err, bizz) {
             res.send(bizz);
         });
     };
 
+    //Lista de negocios de tipo restaurante
     listrestaurantes = function(req, res){
         negocios.find({tipo: "Restaurante"}, function(error, bizz){
             res.send(bizz);
         });
     };
 
+    //Lista de negocios de tipo tienda
     listtiendas = function(req, res){
         negocios.find({tipo: "Tienda"}, function(error, bizz){
             res.send(bizz);
         });
     };
 
+    //Lista de ofertas
     listofertas = function(req, res){
         ofertas.find(function(error, bizz){
             res.send(bizz);
         });
     };
 
+    //Lista de ofertas por fecha de caducidad
     listofertasbydate = function(req, res){
         ofertas.find({caducidad: req.params.caducidad}, function(req, res){
             res.send(bizz);
         });
     };
 
+    //Lista de vuelos por origen/destino/fecha
     listvuelosbyordestdate = function(req, res){
         vuelos.find({origen: req.params.origen, destino: req.params.destino, fecha:req.params.fecha}, function(error, flight){
             res.send(flight)
         })
     };
 
-    //Busqueda d una persona concreta per el seu _id
+    //Busqueda d una pasajero concreta per el seu _id
     findpasajero = (function(req, res) {
         pasajero.findOne({_id: req.params.id}, function(error, person) {
             res.send(person);
         });
     });
 
+    //Busqueda de puerta de embarque por fecha e id
+    findpuerta = function(req, res) {
+        vuelos.findOne({id: req.params.id, fecha: req.params.fecha}, {puerta: true, _id: false}, function(error, door){
+            res.send(door);
+        });
+    };
+
+    //Busqueda de vuelo por id
     findvuelo = (function(req, res) {
         vuelos.findOne({_id: req.params.id}, function(error, flight) {
             res.send(flight);
@@ -222,12 +243,28 @@ module.exports = function(app){
         });   
     });
 
+    findvuelobyusertoday = (function(req, res){
+        pasajero.find({
+            "historico.id_user": req.params.id_user,
+            "historico.fecha": req.params.fecha
+        },
+        {
+            _id: false,
+            "historico.id_flight": true
+        }),
+        function(error, flight){
+            res.send(flight);
+        };
+    });
+
+    //Busqueda de negocio por id
     findnegocios = (function(req, res) {
         negocios.findOne({_id: req.params.id}, function(error, bizz) {
             res.send(bizz);
         });   
     });
 
+    //Busqueda por tarjetas por id
     findtarjetas = (function(req, res) {
         tarjetas.findOne({_id: req.params.id}, function(error, cards) {
             res.send(cards);
@@ -242,6 +279,7 @@ module.exports = function(app){
         })
     });
 
+    //Borrar vuelo por id
     delvuelo = (function(req,res){
 		vuelos.deleteOne({_id: req.params.id}, function(error, flight) {
             console.log("Eliminado Vuelo:", req.params.id);
@@ -249,6 +287,7 @@ module.exports = function(app){
         })
     });
     
+    //Borrar tarjeta por id
     deltarjeta = (function(req,res){
 		tarjetas.deleteOne({_id: req.params.id}, function(error, cards) {
             console.log("Eliminado Pasajero:", req.params.id);
@@ -264,6 +303,7 @@ module.exports = function(app){
         });
     });
 
+    //Borra un interés por id
     delinteres = (function(req,res){
 		interes.deleteOne({_id: req.params.id}, function(error, inte) {
             console.log("Eliminado Interés:", req.params.id);
@@ -271,6 +311,7 @@ module.exports = function(app){
         });
     });
 
+    //Borra un negocio por id
     delnegocios = (function(req,res){
 		negocios.deleteOne({_id: req.params.id}, function(error, bizz) {
             console.log("Eliminado Negocio:", req.params.id);
@@ -278,6 +319,7 @@ module.exports = function(app){
         });
     });
 
+    //Borra ofertas por id
     delofertas = (function(req,res){
 		ofertas.deleteOne({_id: req.params.id}, function(error, bizz) {
             console.log("Eliminada Oferta:", req.params.id);
@@ -285,7 +327,7 @@ module.exports = function(app){
         });
     });
     
-    //Modifica els valors especificats d una persona identificada pel seu _id.
+    //Modifica els valors especificats d una pasajero identificada pel seu _id.
     //Els camps no especificats es mantindran igual
 	updatepasajero = (function(req,res){
 		pasajero.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
@@ -294,6 +336,7 @@ module.exports = function(app){
         });
     });
 
+    //Modifica billete por id
     updatebillete = (function(req,res){
 		billete.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizado billete: ", req.params.id);
@@ -301,6 +344,7 @@ module.exports = function(app){
         });
     });
 
+    //Modifica interes por id
     updateinteres = (function(req,res){
 		interes.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizado interés: ", req.params.id);
@@ -308,6 +352,7 @@ module.exports = function(app){
         });
     });
 
+    //Modifica vuelo por id
     updatevuelo = (function(req,res){
 		vuelos.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizado vuelo: ", req.params.id);
@@ -315,6 +360,7 @@ module.exports = function(app){
         });
     });
 
+    //Modifica negocio por id
     updatenegocios = (function(req,res){
 		negocios.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizado negocio: ", req.params.id);
@@ -322,6 +368,7 @@ module.exports = function(app){
         });
     });
 
+    //Modifica oferta por id
     updateoferta = (function(req,res){
 		ofertas.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizada oferta: ", req.params.id);
@@ -329,6 +376,7 @@ module.exports = function(app){
         });
     });
 
+    //Modifica tarjeta por id
     updatetarjeta = (function(req,res){
 		targetas.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizada targeta: ", req.params.id);
@@ -370,6 +418,8 @@ app.get('/pasajero/:id', findpasajero);
 app.get('/billetes/:id', findbillete);
 app.get('/negocios/:id', findnegocios);
 app.get('/vuelos/:id', findvuelo);
+app.get('/puerta/:id/:fecha', findpuerta);
+app.get('/vuelos/:id_user/:fecha', findvuelobyusertoday);
 
 //--------------------------------DELETE----------------
 //esborrem dades de la BDD
