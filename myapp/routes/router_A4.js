@@ -229,6 +229,12 @@ module.exports = function(app){
         });
     };
 
+    findimagennegocio = function(req, res) {
+        negocios.findOne({id: req.params.id}, {logo: true, _id: false}, function(error, door){
+            res.send(door);
+        });
+    };
+
     //Busqueda de vuelo por id
     findvuelo = (function(req, res) {
         vuelos.findOne({_id: req.params.id}, function(error, flight) {
@@ -408,6 +414,7 @@ app.get('/intereses', listinteres);
 app.get('/negocios', listnegocios);
 app.get('/negocios/restaurantes', listrestaurantes);
 app.get('/negocios/tiendas', listtiendas);
+app.get('/negocios/:id/imagen', findimagennegocio);
 app.get('/ofertas', listofertas);
 app.get('/tarjetas', listtarjetas);
 app.get('/vuelos', listvuelos);
