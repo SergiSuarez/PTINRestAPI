@@ -230,7 +230,7 @@ module.exports = function(app){
     };
 
     findimagennegocio = function(req, res) {
-        negocios.findOne({id: req.params.id}, {logo: true, _id: false}, function(error, door){
+        negocios.findOne({nombre: req.params.id}, {logo: true, _id: false}, function(error, door){
             res.send(door);
         });
     };

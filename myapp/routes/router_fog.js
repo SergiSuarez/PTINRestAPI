@@ -7,6 +7,7 @@ module.exports = function(app){
         var coche = require('../models/A4/coche');
         var lista = require('../models/A4/listaespera');
         var pasajero = require('../models/A4/pospasajero');
+        var node = require('../models/A4/localizaciones');
     //--------------------------------
     //---------------Funcions
         //Insertem una cotxe a la col.leccio
@@ -50,7 +51,25 @@ module.exports = function(app){
             posicion.save();
             res.send();
         };
+
+        //Insertem un nou node de posicionament
+        newnodo = function(req, res){
+            var posicion = new node({
+                nodo: req.body.nodo,
+                latitud: req.body.latitud,
+                longitud: req.body.longitud
+            });
+            posicion.save();
+            res.send();
+        };
     
+        //Llistem tots els nodes
+        listnodos = function(req, res){
+            node.find(function(err, nod) {
+                res.send(nod);
+            });
+        };
+
         //Busqueda de tots els cotxes de la col.leccio
         listcoche = function(req, res){
             coche.find(function(err, car) {
@@ -86,6 +105,18 @@ module.exports = function(app){
             });
         });
 
+        findnodo = (function(req, res) {
+            node.findOne({nodo: req.params.nodo}, {longitud: true, latitud: true, _id:false}, function(error, nod){
+                res.send(nod);
+            });
+        });
+
+        findlatlong = (function(req, res){
+            node.findOne({longitud: req.params.longitud, latitud: req.params.latitud}, {nodo: true, _id: false}, function(error, nod){
+                res.send(nod);
+            });
+        });
+
         //Busqueda d'un pasatger pel seu id_pasajero
         findpasajero = (function(req, res) {
             pasajero.findOne({id_pasajero: req.params.id}, function(error, pos) {
@@ -113,11 +144,24 @@ module.exports = function(app){
                 res.send(listp);
             });
         });
+
+        delnodo = (function(req, res) {
+            node.deleteOne({nodo: req.params.nodo}, function(error, listp){
+                res.send(listp);
+            });
+        });
     
         //Modifica els valors especificats d una cotxe identificada pel seu _id.
         //Els camps no especificats es mantindran igual
         updatecoche = (function(req,res){
             coche.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
+                res.send(upd);
+            });
+        });
+
+
+        updatenodo = (function(req,res){
+            node.updateOne({nodo: req.params.nodo},{$set:req.body},{safe:true}, function(error, upd){
                 res.send(upd);
             });
         });
@@ -144,24 +188,30 @@ module.exports = function(app){
     app.post('/coches', newcoche);
     app.post('/listaespera', newlista);
     app.post('/pospasajeros', newpospasajero);
+    app.post('/nodos', newnodo);
     //--------------------------------GET----------------
     //Obtenim dades de la BDD
     app.get('/coches', listcoche);
     app.get('/listaespera', listlista);
     app.get('/listaespera/next', nextlista);
+    app.get('/nodos', listnodos);
     app.get('/coches/:id', findcoche);
     app.get('/pospasajeros', listpospasajero);
     app.get('/pospasajeros/:id', findpasajero);
+    app.get('/nodos/:nodo', findlatlong);
+    app.get('/nodos/:longitud/:latitud', findnodo);
     //--------------------------------DELETE----------------
     //esborrem dades de la BDD
     app.delete('/coches/:id', delcoche);
     app.delete('/listaespera/:id', dellista);
     app.delete('/pospasajeros/:id', delpospasajero);
+    app.delete('/nodos/:nodo', delnodo);
     //--------------------------------PUT----------------
     //modifiquem dades de la BDD
     app.put('/coches/:id',updatecoche);
     app.put('/listaespera/:id',updatelista);
     app.put('/pospasajeros/:id',updatepospasajero);
+    app.put('/nodos/:nodo', updatenodo);
     };
 
     
