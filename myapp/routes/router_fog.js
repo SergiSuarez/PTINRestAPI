@@ -46,7 +46,11 @@ module.exports = function(app){
             var posicion = new pasajero({
                 id_pasajero: req.body.id_pasajero,
                 posicionx: req.body.posicionx,
-                posiciony: req.body.posiciony
+                posiciony: req.body.posiciony,
+                nombre: req.body.nodo,
+                vuelo: req.body.vuelo,
+                hora: req.body.hora,
+                puerta: req.body.puerta
             });
             posicion.save();
             res.send();
