@@ -91,6 +91,18 @@ module.exports = function(app){
             });
         };
 
+        listpospasajeroporhora = function(req, res){
+            pasajero.find({hora: req.params.time},function(req, lis){
+                res.send(lis);
+            });
+        };
+
+        listpospasajeroporvuelo = function(req, res){
+            pasajero.find({vuelo: req.params.flight}, function(req, lis){
+                res.send(lis);
+            });
+        };
+
         //Busquem el proper pasatger a ser recollit
         nextlista = function(req, res){
             lista.findOne(function(req, next){
@@ -198,6 +210,8 @@ module.exports = function(app){
     app.get('/coches/:id', findcoche);
     app.get('/pospasajeros', listpospasajero);
     app.get('/pospasajeros/:id', findpasajero);
+    app.get('/pospasajeros/hora/:time', listpospasajeroporhora)
+    app.get('/pospasajeros/vuelo/:flight', listpospasajeroporvuelo)
     app.get('/nodos/:nodo', findlatlong);
     app.get('/nodos/:longitud/:latitud', findnodo);
     //--------------------------------DELETE----------------

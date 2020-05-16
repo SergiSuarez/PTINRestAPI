@@ -5,6 +5,10 @@ var PosPasajeroSchema = new Schema({
     id_pasajero: String, //identificador del coche
     posicionx: Number, //posicion actual x
     posiciony: Number, //posicion actual y
+    nodo: String, //posicion en nodo
+    vuelo: String, //numero de vuelo (se sobreentiende que es a fecha de hoy)
+    hora: String, //hora anunciadad el vuelo 
+    puerta: String //puerta de embarque
  },{collection:'pospasajero'});
 
 module.exports = mongoose.model('pospasajero', PosPasajeroSchema);

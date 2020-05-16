@@ -12,6 +12,7 @@ module.exports = function(app){
     var ofertas = require('../models/A4/ofertas');
     var tarjetas = require('../models/A4/tarjetas');
     var vuelos = require('../models/A4/vuelos');
+    var ciudades = require('../models/A4/ciudades');
 //--------------------------------
 //---------------Funcions
     //Nuevo pasajero
@@ -128,6 +129,21 @@ module.exports = function(app){
         console.log("Añadida tarjeta: ", vtarjeta.id_card);
         vtarjeta.save();
         res.send();
+    };
+
+    nciudad = function(req, res){
+        var city = new ciudades({
+            ciudad: req.body.ciudad
+        });
+        console.log("Añadida ciudad: ", city.ciudad);
+        city.save();
+        res.send();
+    };
+
+    listciudades = function(req, res){
+        ciudades.find(function(err, city){
+            res.send(city);
+        });
     };
 
     //Lista de intereses
@@ -265,7 +281,7 @@ module.exports = function(app){
 
     //Busqueda de negocio por id
     findnegocios = (function(req, res) {
-        negocios.findOne({_id: req.params.id}, function(error, bizz) {
+        negocios.findOne({nombre: req.params.id}, function(error, bizz) {
             res.send(bizz);
         });   
     });
@@ -404,6 +420,7 @@ app.post('/negocios', nnegocio);
 app.post('/ofertas', noferta);
 app.post('/tarjetas', ntarjeta);
 app.post('/vuelos', nvuelo);
+app.post('/ciudades', nciudad);
 
 
 //--------------------------------GET----------------
@@ -427,6 +444,7 @@ app.get('/negocios/:id', findnegocios);
 app.get('/vuelos/:id', findvuelo);
 app.get('/puerta/:id/:fecha', findpuerta);
 app.get('/vuelos/:id_user/:fecha', findvuelobyusertoday);
+app.get('/ciudades', listciudades);
 
 //--------------------------------DELETE----------------
 //esborrem dades de la BDD
