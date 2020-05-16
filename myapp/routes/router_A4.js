@@ -15,26 +15,54 @@ module.exports = function(app){
     var ciudades = require('../models/A4/ciudades');
 //--------------------------------
 //---------------Funcions
-    //Nuevo pasajero
-    npasajero = function(req, res){
-        var vpasajero = new pasajero({
-            id_user: req.body.id_user, 
-            nombre: req.body.nombre,
-            apellidos: req.body.apellidos,
-            nacio: req.body.nacio,
-            genero: req.body.genero,
-            vip: req.body.vip,
-            disable: req.body.disable,
-            telefono: req.body.telefono,
-            perfil: req.body.perfil,
-            historico: req.body.historico,
-            username: req.body.username,
-            password: req.body.password
-        });
-        console.log("Añadido Usuario:", vpasajero.id_user);
-        vpasajero.save();
-        res.end();
-    };
+consultaVuelos = function(req, res){
+  vuelo.find({origen: req.body.origen, destino: req.body.destino, fecha: req.body.fecha_origen}, function(err,existe){
+      //if(existe==null){
+  //	res.send({"estado":"ko"});
+  //}else{
+    res.send(existe);
+  //}
+    });
+  };
+
+  login = function(req, res){
+  pasajero.findOne({username: req.body.correu, password: req.body.contrasenya}, function(err,existe){
+      if(existe==null){
+      res.send({"estado":"ko"});
+    }else{
+      res.send({"estado":"ok"});
+    }
+
+    });
+  };
+
+  //Nuevo pasajero
+npasajero = function(req, res){
+	var vpasajero = new pasajero({
+          id_user: req.body.id_user,
+          nombre: req.body.nombre,
+          apellidos: req.body.apellidos,
+          nacio: req.body.nacio,
+          genero: req.body.genero,
+          vip: req.body.vip,
+          disable: req.body.disable,
+          telefono: req.body.telefono,
+          perfil: req.body.perfil,
+          historico: req.body.historico,
+          username: req.body.username,
+          password: req.body.password
+      });
+	  pasajero.findOne({username: req.body.username}, function(err,existe){
+	  //res.send(existe);
+			if(existe==null){
+				console.log("Añadido Usuario:", vpasajero.id_ticket);
+				vpasajero.save();
+				res.send({"estado":"ok"});
+			}else{
+				res.send({"estado":"ko"});
+			}
+		});
+  };
     //Nuevo vuelo
     nvuelo = function(req, res){
         var vvuelo = new vuelos({
@@ -421,6 +449,8 @@ app.post('/ofertas', noferta);
 app.post('/tarjetas', ntarjeta);
 app.post('/vuelos', nvuelo);
 app.post('/ciudades', nciudad);
+app.post('/login', login);
+app.post('/consultaVuelos', consultaVuelos);
 
 
 //--------------------------------GET----------------
@@ -467,4 +497,3 @@ app.put('/vuelos/:id', updatevuelo);
 
 
 };
-
