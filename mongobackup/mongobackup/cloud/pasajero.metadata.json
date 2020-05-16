@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"cloud.pasajero"}],"uuid":"34d131a104eb4b118fd9290624be256b"}

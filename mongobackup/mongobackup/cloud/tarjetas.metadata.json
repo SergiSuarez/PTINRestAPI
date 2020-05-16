@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"cloud.tarjetas"}],"uuid":"f7ada44dbf254df8940f9020201729f2"}

@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"cloud.persona"}],"uuid":"260a0b8719d346d18db0a61af31c06f3"}
