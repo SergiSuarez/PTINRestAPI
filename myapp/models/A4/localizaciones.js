@@ -3,7 +3,8 @@ var mongoose = require('mongoose'),
  
 var NodoSchema = new Schema({
     nombre_nodo: String, //identificador del noso
-    coordenadas: String,
+    latitud: Number,
+    longitud: Number,
     nodos_vecinos: String
  },{collection:'nodos'});
 

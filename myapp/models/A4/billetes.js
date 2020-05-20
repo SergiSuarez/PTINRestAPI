@@ -3,6 +3,7 @@ var mongoose = require('mongoose'),
 
 var BilletesSchema = new Schema({
   id_ticket: String,
+  qr: String,
   pasajero: String,
   id_card: String,
   id_user: String,

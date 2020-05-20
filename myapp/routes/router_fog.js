@@ -59,9 +59,10 @@ module.exports = function(app){
         //Insertem un nou node de posicionament
         newnodo = function(req, res){
             var posicion = new node({
-                nodo: req.body.nodo,
+                nombre_nodo: req.body.nombre_nodo,
+                longitud: req.body.longitud,
                 latitud: req.body.latitud,
-                longitud: req.body.longitud
+                nodos_vecinos: req.body.nodos_vecinos
             });
             posicion.save();
             res.send();
@@ -162,7 +163,7 @@ module.exports = function(app){
         });
 
         delnodo = (function(req, res) {
-            node.deleteOne({nodo: req.params.nodo}, function(error, listp){
+            node.deleteOne({_id: req.params.nodo}, function(error, listp){
                 res.send(listp);
             });
         });
@@ -177,7 +178,7 @@ module.exports = function(app){
 
 
         updatenodo = (function(req,res){
-            node.updateOne({nodo: req.params.nodo},{$set:req.body},{safe:true}, function(error, upd){
+            node.updateOne({nombre_nodo: req.params.nodo},{$set:req.body},{safe:true}, function(error, upd){
                 res.send(upd);
             });
         });
@@ -193,6 +194,17 @@ module.exports = function(app){
             pasajero.updateOne({id_pasajero: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
                 res.send(upd);
             });
+        });
+
+        randompos = (function(req, res){
+            node.findOne({nombre_nodo: req.params.nodo},function(req, nod){
+                var lista = nod.nodos_vecinos.split(',');
+                console.log(lista);
+                var result = lista[Math.floor(Math.random() * lista.length)];
+                console.log(result);
+                res.send(result);
+            });
+
         });
     
     //--------------------------------
@@ -218,6 +230,7 @@ module.exports = function(app){
     app.get('/pospasajeros/vuelo/:flight', listpospasajeroporvuelo)
     app.get('/nodos/:nodo', findlatlong);
     app.get('/nodos/:longitud/:latitud', findnodo);
+    app.get('/nodos/random/position/:nodo', randompos);
     //--------------------------------DELETE----------------
     //esborrem dades de la BDD
     app.delete('/coches/:id', delcoche);
