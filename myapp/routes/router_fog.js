@@ -75,6 +75,13 @@ module.exports = function(app){
             });
         };
 
+        initialnode = function(req, res){
+            node.find(function(err, list) {
+                var result = list[Math.floor(Math.random() * list.length)];
+                res.send(result);
+            });
+        };
+
         //Busqueda de tots els cotxes de la col.leccio
         listcoche = function(req, res){
             coche.find(function(err, car) {
@@ -199,9 +206,7 @@ module.exports = function(app){
         randompos = (function(req, res){
             node.findOne({nombre_nodo: req.params.nodo},function(req, nod){
                 var lista = nod.nodos_vecinos.split(',');
-                console.log(lista);
                 var result = lista[Math.floor(Math.random() * lista.length)];
-                console.log(result);
                 res.send(result);
             });
 
@@ -231,6 +236,7 @@ module.exports = function(app){
     app.get('/nodos/:nodo', findlatlong);
     app.get('/nodos/:longitud/:latitud', findnodo);
     app.get('/nodos/random/position/:nodo', randompos);
+    app.get('/nodos/random/init/init', initialnode);
     //--------------------------------DELETE----------------
     //esborrem dades de la BDD
     app.delete('/coches/:id', delcoche);
