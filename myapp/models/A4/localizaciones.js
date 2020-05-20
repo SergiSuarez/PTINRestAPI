@@ -3,8 +3,9 @@ var mongoose = require('mongoose'),
  
 var NodoSchema = new Schema({
     nodo: String, //identificador del noso
-    latitud: Number,
-    longitud: Number
- },{collection:'intereses'});
+    coordenadas: String,
+    nodo: String,
+    vecinos: String
+ },{collection:'nodos'});
 
-module.exports = mongoose.model('nodo', NodoSchema);
+module.exports = mongoose.model('nodos', NodoSchema);
