@@ -8,19 +8,18 @@ module.exports = function(app){
         var lista = require('../models/A4/listaespera');
         var pasajero = require('../models/A4/pospasajero');
         var node = require('../models/A4/localizaciones');
+        var fetch = require("node-fetch");
     //--------------------------------
     //---------------Funcions
         //Insertem una cotxe a la col.leccio
         newcoche = function(req, res){
             var car = new coche({
                 id_coche: req.body.id_coche, 
-                matricula: req.body.matricula,
-                posicionx: req.body.posicionx,
-                posiciony: req.body.posiciony,
-                destinox: req.body.destinox,
-                destinoy: req.body.destinoy,
+                puntOrigencotxe: req.body.puntOrigencotxe,
+                puntOrigen: req.body.puntOrigen,
+                puntDesti: req.body.puntDesti,
+                puntActual: req.body.puntActual,
                 estado: req.body.estado,
-                color: req.body.color,
                 pasajero: req.body.pasajero    
             });
             car.save();
@@ -33,10 +32,8 @@ module.exports = function(app){
                 id_pasajero: req.body.id_pasajero,
                 vip: req.body.vip,
                 disable: req.body.disable,
-                posicionx: req.body.posicionx,
-                posiciony: req.body.posiciony,
-                destinox: req.body.destinox,
-                destinoy: req.body.destinoy
+                nodoactual: req.body.nodoactual,
+                nododestino: req.body.nododestino,
             });
             list.save();
             res.send();
@@ -45,8 +42,8 @@ module.exports = function(app){
         newpospasajero = function(req, res){
             var posicion = new pasajero({
                 id_pasajero: req.body.id_pasajero,
-                posicionx: req.body.posicionx,
-                posiciony: req.body.posiciony,
+                longitud: req.body.longitud,
+                latitud: req.body.latitud,
                 nombre: req.body.nodo,
                 vuelo: req.body.vuelo,
                 hora: req.body.hora,
@@ -117,7 +114,7 @@ module.exports = function(app){
 
         //Busquem el proper pasatger a ser recollit
         nextlista = function(req, res){
-            lista.findOne(function(req, next){
+            lista.findOneAndRemove(function(req, next){
                 res.send(next);
             });
         };
@@ -207,10 +204,103 @@ module.exports = function(app){
             node.findOne({nombre_nodo: req.params.nodo},function(req, nod){
                 var lista = nod.nodos_vecinos.split(',');
                 var result = lista[Math.floor(Math.random() * lista.length)];
-                res.send(result);
+                console.log(result);
+                var consulta = {};
+                consulta['nombre_nodo'] = result;
+                console.log(consulta);
+                node.findOne(consulta, function(req, resp){
+                    console.log(resp);
+                    res.send(resp);
+                });           
             });
-
         });
+
+        randomposbypass = function(req, res){
+            pasajero.findOne({id_pasajero: req.params.id_pasajero}, function(error, pos){
+            console.log('id_pasajero: ',req.params.id_pasajero);
+            var pass = req.params.id_pasajero;
+            console.log('pos:',pos);
+            if(isEmpty(pos)){
+                console.log('Entrada del pasajero:', req.params.id_pasajero);
+                node.find(function(req, nod){
+                    var lista=new Array;
+                    for (i=0; i<nod.length; i++){
+                        lista[i]=nod[i].nombre_nodo;
+                    };
+                    var result = lista[Math.floor(Math.random() * lista.length)];
+                    //console.log('Result:',result);
+                    var consulta = {};
+                    //consulta['nombre_nodo'] = result;
+                    //console.log('Consulta:',consulta);
+                    node.findOne(consulta, function(req, resp){
+                        var parpas = new pasajero;
+                        parpas['id_pasajero'] = pass;
+                        parpas['nodo'] = resp.nombre_nodo;
+                        parpas['longitud'] = resp.longitud;
+                        parpas['latitud'] = resp.latitud;
+                        parpas['vuelo'] = "";
+                        parpas['hora'] = "";
+                        parpas['puerta'] = "";
+                        var urlcloud = "http://localhost:3000/billetes/pasajero/"
+                        var today = new Date;
+                        var dd = today.getDate();
+                        if (dd<10){
+                            dd = '0'+dd;
+                        };
+                        var mm = today.getMonth() + 1;
+                        console.log('mes:',mm);
+                        if (mm<10){
+                            mm = '0'+mm;
+                        };
+                        var yyyy = today.getFullYear();
+                        today = yyyy+'-'+mm+'-'+dd;
+                        urlcloud = urlcloud+pass+'/'+today;
+                        console.log('urlcloud:',urlcloud);
+                        fetch(urlcloud)
+                        .then((resp) => resp.json())
+                            //return response.json();
+                        .then(function(data) {
+                            //console.log('Data:', data);
+                            parpas['vuelo'] = data[0].id_flight;
+                            parpas['hora'] = data[0].hora;
+                            parpas['puerta'] = data[0].puerta;
+                            //console.log('Parpas:', parpas);
+                            parpas.save();
+                            res.send(parpas);
+                        });
+                    });
+                });
+                //res.send();
+            }
+            else
+            {
+                var posicion = pos.nodo;
+                console.log(posicion);
+                var consulta = {};
+                consulta['nombre_nodo'] = posicion;
+                node.findOne(consulta,function(req, nod){
+                    var lista = nod.nodos_vecinos.split(',');
+                    var result = lista[Math.floor(Math.random() * lista.length)];
+                    consulta['nombre_nodo'] = result;
+                    node.findOne(consulta, function(req, resp){
+                        console.log(resp);
+                        parpas = {};
+                        parpas['id_pasajero'] = pass;
+                        conpas = {};
+                        conpas['nodo'] = resp.nombre_nodo;
+                        conpas['longitud'] = resp.latitud;
+                        conpas['latitud'] = resp.longitud;
+                        pasajero.updateOne(parpas,conpas,{safe:true}, function(error, upd){
+                            pasajero.findOne(parpas, function(error, pos){
+                                res.send(pos);
+                            });
+                        });
+                    }); 
+                });
+            }
+        });
+        
+    };
     
     //--------------------------------
     
@@ -235,7 +325,7 @@ module.exports = function(app){
     app.get('/pospasajeros/vuelo/:flight', listpospasajeroporvuelo)
     app.get('/nodos/:nodo', findlatlong);
     app.get('/nodos/:longitud/:latitud', findnodo);
-    app.get('/nodos/random/position/:nodo', randompos);
+    app.get('/nodos/random/position/:id_pasajero', randomposbypass);
     app.get('/nodos/random/init/init', initialnode);
     //--------------------------------DELETE----------------
     //esborrem dades de la BDD
@@ -249,6 +339,16 @@ module.exports = function(app){
     app.put('/listaespera/:id',updatelista);
     app.put('/pospasajeros/:id',updatepospasajero);
     app.put('/nodos/:nodo', updatenodo);
+    };
+
+    //Funcions auxiliars
+
+    function isEmpty(obj) {
+        for(var key in obj) {
+            if(obj.hasOwnProperty(key))
+                return false;
+        }
+        return true;
     };
 
     

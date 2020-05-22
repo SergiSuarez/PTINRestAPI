@@ -1,16 +1,12 @@
-var mongoose = require('mongoose'),
-    Schema   = mongoose.Schema;
+var mongoose = require('mongoose'), Schema = mongoose.Schema; 
+var cocheSchema = new Schema({ 
+  id_coche: String, //identificador del coche 
+  puntOrigencotxe: String, //node inicial on es localitza el cotxe, pàrking 
+  puntOrigen: String, //node on es troba el client 
+  puntDesti: String, //node on es dirigeix el client 
+  puntActual: String, //node actual 
+  estado: String, //ocupado, cargando, disponible, buscando 
+  id_pasajero: String //identificación del pasajero 
+},{collection:'coches'}); 
 
-var CocheSchema = new Schema({
-  id_coche: String, //identificador del coche
-  matricula: String, //matricula del coche
-  posicionx: Number, //posicion actual x
-  posiciony: Number, //posicion actual y
-  destinox: Number, //destivo coordenada x
-  destinoy: Number, //destino coordenada y
-  estado: String, //ocupado, cargando, disponible, buscando
-  color: String, //color del vehiculo
-  pasajero: String, //id_pasajero que estoy llevando o voy a buscar
-},{collection:'coches'});
-
-module.exports = mongoose.model('coches', CocheSchema);
+module.exports = mongoose.model('coches', cocheSchema);

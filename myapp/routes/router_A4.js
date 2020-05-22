@@ -92,6 +92,8 @@ npasajero = function(req, res){
             id_flight: req.body.id_flight,
             aerolinea: req.body.aerolinea,
             fecha: req.body.fecha,
+            hora: req.body.hora,
+            puerta: req.body.puerta,
             asiento: req.body.asiento,
             vip: req.body.vip,
             disable: req.body.disable,
@@ -268,7 +270,7 @@ npasajero = function(req, res){
 
     //Busqueda de puerta de embarque por fecha e id
     findpuerta = function(req, res) {
-        vuelos.findOne({id: req.params.id, fecha: req.params.fecha}, {puerta: true, _id: false}, function(error, door){
+        vuelos.findOne({id: req.params.id, fecha: req.params.fecha}, function(error, door){
             res.send(door);
         });
     };
@@ -293,6 +295,19 @@ npasajero = function(req, res){
         });   
     });
 
+    findvuelosbypasbyfecha = (function(req,res){
+        console.log ("Buscando vuelos de:", req.params.pasajero, "en fecha", req.params.fecha);
+        billete.find({
+            "pasajero": req.params.pasajero,
+            "fecha": req.params.fecha
+        },
+        function(err, flight){
+            console.log("Flight:", flight);
+            
+            res.send(flight);
+        });
+    });
+
     findvuelobyusertoday = (function(req, res){
         pasajero.find({
             "historico.id_user": req.params.id_user,
@@ -301,10 +316,10 @@ npasajero = function(req, res){
         {
             _id: false,
             "historico.id_flight": true
-        }),
+        },
         function(error, flight){
             res.send(flight);
-        };
+        });
     });
 
     //Busqueda de negocio por id
@@ -434,7 +449,6 @@ npasajero = function(req, res){
         });
     });
       
-
 //--------------------------------
 
 //Juntem els diferents mètodes de la API i les diferents formes de cridar-los amb les funcions corresponents
@@ -474,6 +488,7 @@ app.get('/negocios/:id', findnegocios);
 app.get('/vuelos/:id', findvuelo);
 app.get('/puerta/:id/:fecha', findpuerta);
 app.get('/vuelos/:id_user/:fecha', findvuelobyusertoday);
+app.get('/billetes/pasajero/:pasajero/:fecha', findvuelosbypasbyfecha);
 app.get('/ciudades', listciudades);
 
 //--------------------------------DELETE----------------

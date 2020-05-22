@@ -10,6 +10,8 @@ var BilletesSchema = new Schema({
   id_flight: String,
   aerolinea: String,
   fecha: String,
+  hora: String,
+  puerta: String,
   asiento: String,
   vip: Boolean,
   disable: Boolean,
