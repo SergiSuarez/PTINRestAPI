@@ -6,6 +6,7 @@ var NegociosSchema = new Schema({
     tipo: String,
     local: String,
     descripcion: String,
+    intereses: [String],
     estado: String,
     logo: String,
     foto: String,

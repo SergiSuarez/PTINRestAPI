@@ -124,6 +124,7 @@ npasajero = function(req, res){
             tipo: req.body.tipo,
             local: req.body.local,
             descripcion: req.body.descripcion,
+            intereses: req.body.intereses,
             estado: req.body.estado,
             logo: req.body.logo,
             foto: req.body.foto,
@@ -281,6 +282,24 @@ npasajero = function(req, res){
         pasajero.findOne({username: req.params.username}, {intereses: true, _id: false}, function(req, inte){
             var lista = inte.intereses;
             ofertas.find({intereses: {$in: lista}}, function(req, offers){ 
+                res.send(offers);  
+            });
+        });
+    };
+
+    listaofertasporpref = function(req, res) {
+        pasajero.findOne({username: req.params.username}, {intereses: true, _id: false}, function(req, inte){
+            var lista = inte.intereses;
+            ofertas.find({intereses: {$in: lista}}, function(req, offers){ 
+                res.send(offers);  
+            });
+        });
+    };
+
+    listanegociosporpref = function(req, res) {
+        pasajero.findOne({username: req.params.username}, {intereses: true, _id: false}, function(req, inte){
+            var lista = inte.intereses;
+            negocios.find({intereses: {$in: lista}}, function(req, offers){ 
                 res.send(offers);  
             });
         });
@@ -502,6 +521,7 @@ app.get('/vuelos/:id_user/:fecha', findvuelobyusertoday);
 app.get('/billetes/pasajero/:pasajero/:fecha', findvuelosbypasbyfecha);
 app.get('/ciudades', listciudades);
 app.get('/ofertas/porinteres/:username', listaofertasporpref);
+app.get('/negocios/porinteres/:username', listanegociosporpref);
 //--------------------------------DELETE----------------
 //esborrem dades de la BDD
 app.delete('/pasajero/:id', delpasajero);
