@@ -13,7 +13,7 @@ var pasajeroSchema = new Schema({
     disable: Boolean,
     telefono: String ,
     perfil: String,
-    intereses: String,
+    intereses: [String],
     historico: [{
       _id: {
         oid: String

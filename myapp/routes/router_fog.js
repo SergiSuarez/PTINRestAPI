@@ -161,7 +161,7 @@ module.exports = function(app){
 
         //Esborra un pasatger de la llista de posicions p.ex. quan ja no hi és a la terminal
         delpospasajero = (function(req, res) {
-            pasajero.deleteOne({_id: req.params.id}, function(error, listp){
+            pasajero.deleteOne({id_pasajero: req.params.id_pasajero}, function(error, listp){
                 res.send(listp);
             });
         });
@@ -217,11 +217,11 @@ module.exports = function(app){
 
         randomposbypass = function(req, res){
             pasajero.findOne({id_pasajero: req.params.id_pasajero}, function(error, pos){
-            console.log('id_pasajero: ',req.params.id_pasajero);
+            //console.log('id_pasajero: ',req.params.id_pasajero);
             var pass = req.params.id_pasajero;
-            console.log('pos:',pos);
+            //console.log('pos:',pos);
             if(isEmpty(pos)){
-                console.log('Entrada del pasajero:', req.params.id_pasajero);
+                //console.log('Entrada del pasajero:', req.params.id_pasajero);
                 node.find(function(req, nod){
                     var lista=new Array;
                     for (i=0; i<nod.length; i++){
@@ -331,7 +331,7 @@ module.exports = function(app){
     //esborrem dades de la BDD
     app.delete('/coches/:id', delcoche);
     app.delete('/listaespera/:id', dellista);
-    app.delete('/pospasajeros/:id', delpospasajero);
+    app.delete('/pospasajeros/:id_pasajero', delpospasajero);
     app.delete('/nodos/:nodo', delnodo);
     //--------------------------------PUT----------------
     //modifiquem dades de la BDD

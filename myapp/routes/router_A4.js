@@ -50,7 +50,8 @@ npasajero = function(req, res){
           perfil: req.body.perfil,
           historico: req.body.historico,
           username: req.body.username,
-          password: req.body.password
+          password: req.body.password,
+          intereses: req.body.intereses
       });
 	  pasajero.findOne({username: req.body.username}, function(err,existe){
 	  //res.send(existe);
@@ -139,7 +140,8 @@ npasajero = function(req, res){
             id_shop: req.body.id_shop,
             descripcion: req.body.descripcion,
             caducidad: req.body.caducidad,
-            publico: req.body.publico
+            publico: req.body.publico,
+            intereses: req.body.intereses
         });
         console.log("Añadida Oferta: ", voferta.descripcion);
         voferta.save();
@@ -272,6 +274,15 @@ npasajero = function(req, res){
     findpuerta = function(req, res) {
         vuelos.findOne({id: req.params.id, fecha: req.params.fecha}, function(error, door){
             res.send(door);
+        });
+    };
+
+    listaofertasporpref = function(req, res) {
+        pasajero.findOne({username: req.params.username}, {intereses: true, _id: false}, function(req, inte){
+            var lista = inte.intereses;
+            ofertas.find({intereses: {$in: lista}}, function(req, offers){ 
+                res.send(offers);  
+            });
         });
     };
 
@@ -490,7 +501,7 @@ app.get('/puerta/:id/:fecha', findpuerta);
 app.get('/vuelos/:id_user/:fecha', findvuelobyusertoday);
 app.get('/billetes/pasajero/:pasajero/:fecha', findvuelosbypasbyfecha);
 app.get('/ciudades', listciudades);
-
+app.get('/ofertas/porinteres/:username', listaofertasporpref);
 //--------------------------------DELETE----------------
 //esborrem dades de la BDD
 app.delete('/pasajero/:id', delpasajero);
