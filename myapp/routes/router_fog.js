@@ -47,7 +47,8 @@ module.exports = function(app){
                 nombre: req.body.nodo,
                 vuelo: req.body.vuelo,
                 hora: req.body.hora,
-                puerta: req.body.puerta
+                puerta: req.body.puerta,
+                coche: req.body.coche
             });
             posicion.save();
             res.send();
@@ -275,28 +276,49 @@ module.exports = function(app){
             else
             {
                 var posicion = pos.nodo;
+                var vehiculo = pos.coche;
                 console.log(posicion);
                 var consulta = {};
                 consulta['nombre_nodo'] = posicion;
-                node.findOne(consulta,function(req, nod){
-                    var lista = nod.nodos_vecinos.split(',');
-                    var result = lista[Math.floor(Math.random() * lista.length)];
-                    consulta['nombre_nodo'] = result;
-                    node.findOne(consulta, function(req, resp){
-                        console.log(resp);
-                        parpas = {};
-                        parpas['id_pasajero'] = pass;
-                        conpas = {};
-                        conpas['nodo'] = resp.nombre_nodo;
-                        conpas['longitud'] = resp.latitud;
-                        conpas['latitud'] = resp.longitud;
-                        pasajero.updateOne(parpas,conpas,{safe:true}, function(error, upd){
-                            pasajero.findOne(parpas, function(error, pos){
-                                res.send(pos);
+                if (vehiculo == 'Ningno'){
+                    node.findOne(consulta,function(req, nod){
+                        var lista = nod.nodos_vecinos.split(',');
+                        var result = lista[Math.floor(Math.random() * lista.length)];
+                        consulta['nombre_nodo'] = result;
+                        node.findOne(consulta, function(req, resp){
+                            console.log(resp);
+                            parpas = {};
+                            parpas['id_pasajero'] = pass;
+                            conpas = {};
+                            conpas['nodo'] = resp.nombre_nodo;
+                            conpas['longitud'] = resp.latitud;
+                            conpas['latitud'] = resp.longitud;
+                            pasajero.updateOne(parpas,conpas,{safe:true}, function(error, upd){
+                                pasajero.findOne(parpas, function(error, pos){
+                                    res.send(pos);
+                                });
+                            });
+                        }); 
+                    });
+                }
+                else{
+                    coche.findOne({id_coche: vehiculo},function(req, car){
+                        node.findOne({nombre_nodo: car.puntActual}, function(req, resp){
+                            console.log(resp);
+                            parpas = {};
+                            parpas['id_pasajero'] = pass;
+                            conpas = {};
+                            conpas['nodo'] = resp.nombre_nodo;
+                            conpas['longitud'] = resp.latitud;
+                            conpas['latitud'] = resp.longitud;
+                            pasajero.updateOne(parpas,conpas,{safe:true}, function(error, upd){
+                                pasajero.findOne(parpas, function(error, pos){
+                                    res.send(pos);
+                                });
                             });
                         });
-                    }); 
-                });
+                    })
+                }
             }
         });
         
@@ -326,7 +348,6 @@ module.exports = function(app){
     app.get('/nodos/:nodo', findlatlong);
     app.get('/nodos/:longitud/:latitud', findnodo);
     app.get('/nodos/random/position/:id_pasajero', randomposbypass);
-    app.get('/nodos/random/init/init', initialnode);
     //--------------------------------DELETE----------------
     //esborrem dades de la BDD
     app.delete('/coches/:id', delcoche);

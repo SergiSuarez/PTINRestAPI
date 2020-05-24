@@ -8,7 +8,8 @@ var PosPasajeroSchema = new Schema({
     nodo: String, //posicion en nodo
     vuelo: String, //numero de vuelo (se sobreentiende que es a fecha de hoy)
     hora: String, //hora anunciadad el vuelo 
-    puerta: String //puerta de embarque
+    puerta: String, //puerta de embarque
+    coche: String //coche que el que se encuentra el pasajero (Ninguno si no está en ningún coche) Esto previene el movimiento aleatorio
  },{collection:'pospasajero'});
 
 module.exports = mongoose.model('pospasajero', PosPasajeroSchema);
