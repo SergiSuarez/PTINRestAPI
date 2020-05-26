@@ -4,17 +4,17 @@ var mongoose = require('mongoose'),
 //Classe persona, conté un nom i un cognom. S'emmagatezma en la col.lecció 'persona' de mongoDB
 //Sino s'especifica la col.lecio es creara una col.leccio amb el nom de la classe en plural
 var pasajeroSchema = new Schema({
-    id_user: String,
-    nombre: String,
-    apellidos: String,
-    nacio: String,
-    genero: String,
-    vip: Boolean,
-    disable: Boolean,
-    telefono: String ,
-    perfil: String,
-    intereses: [String],
-    historico: [{
+    id_user: String,            //DNI o pasaporte
+    nombre: String,             //Nombre completo del pasajero sin apellido(s)
+    apellidos: String,          //Apellido(s) del pasajero
+    nacio: String,              //Fecha de nacimiento
+    genero: String,             //Hombre, Mujer
+    vip: Boolean,               //Bool que indica si es vip
+    disable: Boolean,           //Bool que indica si es PMR
+    telefono: String ,          //Teléfono de contacto
+    perfil: String,             //Perfil del usuario (es pasajero o administrador)
+    intereses: [String],        //Array de intereses para que haya match con ofertas/negocios
+    historico: [{               //Array de billetes que tiene asociados
       _id: {
         oid: String
       },
@@ -32,8 +32,8 @@ var pasajeroSchema = new Schema({
       maletas_checked: Number,
       estado: String
     }],
-    username: String,
-    password: String
+    username: String,           //email del pasajero
+    password: String            //contraseña de acceso
 },{collection:'pasajero'});
 
 //Exportem el model del schema per poder treballar amb ell en ../routes/router.js

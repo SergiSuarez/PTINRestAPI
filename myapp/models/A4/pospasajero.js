@@ -3,8 +3,8 @@ var mongoose = require('mongoose'),
  
 var PosPasajeroSchema = new Schema({
     id_pasajero: String, //identificador del coche
-    latitud: Number, //posicion actual x
-    longitud: Number, //posicion actual y
+    latitud: Number, //latitud
+    longitud: Number, //longitud
     nodo: String, //posicion en nodo
     vuelo: String, //numero de vuelo (se sobreentiende que es a fecha de hoy)
     hora: String, //hora anunciadad el vuelo 

@@ -115,12 +115,8 @@ module.exports = function(app){
 
         //Busquem el proper pasatger a ser recollit
         nextlista = function(req, res){
-            console.log('entrando en nextlista');
             lista.findOne(function(req, next){
-               console.log('next1:', next);
                 lista.deleteOne({_id: next._id}, function(req, del){
-                    console.log('next:', next.id_pasajero, 'del:', del);
- //                   res.send(next);
                 });
                 res.send(next);
             });
