@@ -16,7 +16,7 @@ module.exports = function(app){
 //--------------------------------
 //---------------Funcions
 consultaVuelos = function(req, res){
-  vuelo.find({origen: req.body.origen, destino: req.body.destino, fecha: req.body.fecha_origen}, function(err,existe){
+  vuelos.find({origen: req.body.origen, destino: req.body.destino, fecha: req.body.fecha_origen}, function(err,existe){
       //if(existe==null){
   //	res.send({"estado":"ko"});
   //}else{
