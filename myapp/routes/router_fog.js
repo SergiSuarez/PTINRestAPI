@@ -276,6 +276,7 @@ module.exports = function(app){
                         parpas['hora'] = "";
                         parpas['puerta'] = "";
                         var urlcloud = "http://localhost:3000/billetes/pasajero/"
+                        //var urlcloud = "http://craaxcloud.epsevg.upc.edu:36301/billetes/pasajero/"
                         var today = new Date;
                         var dd = today.getDate();
                         if (dd<10){
