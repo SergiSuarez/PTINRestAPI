@@ -265,11 +265,11 @@ npasajero = function(req, res){
     };
 
     //Busqueda d una pasajero concreta per el seu _id
-    findpasajero = (function(req, res) {
-        pasajero.findOne({_id: req.params.id}, function(error, person) {
+    findpasajero = function(req, res) {
+        pasajero.findOne({id_username: req.params.id}, function(error, person) {
             res.send(person);
         });
-    });
+    };
 
     //Busqueda de puerta de embarque por fecha e id
     findpuerta = function(req, res) {
@@ -312,20 +312,20 @@ npasajero = function(req, res){
     };
 
     //Busqueda de vuelo por id
-    findvuelo = (function(req, res) {
+    findvuelo = function(req, res) {
         vuelos.findOne({_id: req.params.id}, function(error, flight) {
             res.send(flight);
         });
-    });
+    };
 
     //Busqueda de todos los billetes por _id
-    findbillete = (function(req, res) {
+    findbillete = function(req, res) {
         billete.findOne({_id: req.params.id}, function(error, bill) {
             res.send(bill);
         });   
-    });
+    };
 
-    findvuelosbypasbyfecha = (function(req,res){
+    findvuelosbypasbyfecha = function(req,res){
         console.log ("Buscando vuelos de:", req.params.pasajero, "en fecha", req.params.fecha);
         billete.find({
             "pasajero": req.params.pasajero,
@@ -336,9 +336,9 @@ npasajero = function(req, res){
             
             res.send(flight);
         });
-    });
+    };
 
-    findvuelobyusertoday = (function(req, res){
+    findvuelobyusertoday = function(req, res){
         pasajero.find({
             "historico.id_user": req.params.id_user,
             "historico.fecha": req.params.fecha
@@ -350,134 +350,134 @@ npasajero = function(req, res){
         function(error, flight){
             res.send(flight);
         });
-    });
+    };
 
     //Busqueda de negocio por id
-    findnegocios = (function(req, res) {
+    findnegocios = function(req, res) {
         negocios.findOne({nombre: req.params.id}, function(error, bizz) {
             res.send(bizz);
         });   
-    });
+    };
 
     //Busqueda por tarjetas por id
-    findtarjetas = (function(req, res) {
+    findtarjetas = function(req, res) {
         tarjetas.findOne({_id: req.params.id}, function(error, cards) {
             res.send(cards);
         });   
-    });
+    };
 
     //Esborra un pasajero donant el seu _id
-	delpasajero = (function(req,res){
+	delpasajero = function(req,res){
 		pasajero.deleteOne({_id: req.params.id}, function(error, person) {
             console.log("Eliminado Pasajero:", req.params.id);
         	res.send(person);
         })
-    });
+    };
 
     //Borrar vuelo por id
-    delvuelo = (function(req,res){
+    delvuelo = function(req,res){
 		vuelos.deleteOne({_id: req.params.id}, function(error, flight) {
             console.log("Eliminado Vuelo:", req.params.id);
         	res.send(flight);
         })
-    });
+    };
     
     //Borrar tarjeta por id
-    deltarjeta = (function(req,res){
+    deltarjeta = function(req,res){
 		tarjetas.deleteOne({_id: req.params.id}, function(error, cards) {
             console.log("Eliminado Pasajero:", req.params.id);
         	res.send(cards);
         })
-	});
+	};
 
     //Esborra un billete donant el seu _id
-	delbillete = (function(req,res){
+	delbillete = function(req,res){
 		billete.deleteOne({_id: req.params.id}, function(error, bill) {
             console.log("Eliminado Billete:", req.params.id);
         	res.send(bill);
         });
-    });
+    };
 
     //Borra un interés por id
-    delinteres = (function(req,res){
+    delinteres = function(req,res){
 		interes.deleteOne({_id: req.params.id}, function(error, inte) {
             console.log("Eliminado Interés:", req.params.id);
         	res.send(inte);
         });
-    });
+    };
 
     //Borra un negocio por id
-    delnegocios = (function(req,res){
+    delnegocios = function(req,res){
 		negocios.deleteOne({_id: req.params.id}, function(error, bizz) {
             console.log("Eliminado Negocio:", req.params.id);
         	res.send(bizz);
         });
-    });
+    };
 
     //Borra ofertas por id
-    delofertas = (function(req,res){
+    delofertas = function(req,res){
 		ofertas.deleteOne({_id: req.params.id}, function(error, bizz) {
             console.log("Eliminada Oferta:", req.params.id);
         	res.send(bizz);
         });
-    });
+    };
     
     //Modifica els valors especificats d una pasajero identificada pel seu _id.
     //Els camps no especificats es mantindran igual
-	updatepasajero = (function(req,res){
+	updatepasajero = function(req,res){
 		pasajero.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizado pasajero: ", req.params.id);
             res.send(upd);
         });
-    });
+    };
 
     //Modifica billete por id
-    updatebillete = (function(req,res){
+    updatebillete = function(req,res){
 		billete.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizado billete: ", req.params.id);
             res.send(upd);
         });
-    });
+    };
 
     //Modifica interes por id
-    updateinteres = (function(req,res){
+    updateinteres = function(req,res){
 		interes.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizado interés: ", req.params.id);
             res.send(upd);
         });
-    });
+    };
 
     //Modifica vuelo por id
-    updatevuelo = (function(req,res){
+    updatevuelo = function(req,res){
 		vuelos.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizado vuelo: ", req.params.id);
             res.send(upd);
         });
-    });
+    };
 
     //Modifica negocio por id
-    updatenegocios = (function(req,res){
+    updatenegocios = function(req,res){
 		negocios.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizado negocio: ", req.params.id);
             res.send(upd);
         });
-    });
+    };
 
     //Modifica oferta por id
-    updateoferta = (function(req,res){
+    updateoferta = function(req,res){
 		ofertas.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizada oferta: ", req.params.id);
             res.send(upd);
         });
-    });
+    };
 
     //Modifica tarjeta por id
-    updatetarjeta = (function(req,res){
+    updatetarjeta = function(req,res){
 		targetas.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
             console.log("Actualizada targeta: ", req.params.id);
             res.send(upd);
         });
-    });
+    };
       
 //--------------------------------
 

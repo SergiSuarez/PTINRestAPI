@@ -115,93 +115,99 @@ module.exports = function(app){
 
         //Busquem el proper pasatger a ser recollit
         nextlista = function(req, res){
-            lista.findOneAndRemove(function(req, next){
+            console.log('entrando en nextlista');
+            lista.findOne(function(req, next){
+               console.log('next1:', next);
+                lista.deleteOne({_id: next._id}, function(req, del){
+                    console.log('next:', next.id_pasajero, 'del:', del);
+ //                   res.send(next);
+                });
                 res.send(next);
             });
         };
     
         //Busqueda d'un cotxe concret per el seu _id
-        findcoche = (function(req, res) {
+        findcoche = function(req, res) {
             coche.findOne({id_coche: req.params.id}, function(error, car) {
                 res.send(car);
             });
-        });
+        };
 
-        findnodo = (function(req, res) {
+        findnodo = function(req, res) {
             node.findOne({nodo: req.params.nodo}, {longitud: true, latitud: true, _id:false}, function(error, nod){
                 res.send(nod);
             });
-        });
+        };
 
-        findlatlong = (function(req, res){
+        findlatlong = function(req, res){
             node.findOne({longitud: req.params.longitud, latitud: req.params.latitud}, {nodo: true, _id: false}, function(error, nod){
                 res.send(nod);
             });
-        });
+        };
 
         //Busqueda d'un pasatger pel seu id_pasajero
-        findpasajero = (function(req, res) {
+        findpasajero = function(req, res) {
             pasajero.findOne({id_pasajero: req.params.id}, function(error, pos) {
                 res.send(pos);
             });
-        });
+        };
     
         //Esborra un cotxe donant el seu _id
-        delcoche = (function(req,res){
+        delcoche = function(req,res){
             coche.deleteOne({_id: req.params.id}, function(error, car) {
                 res.send(car);
             });
-        });
+        };
 
         //Esborra un pasatger de la llista d'espera p.ex. quan un cotxe va a buscar-ho
-        dellista = (function(req, res) {
+        dellista = function(req, res) {
             lista.deleteOne({_id: req.params.id}, function(error, listd){
                 res.send(listd);
             });
-        });
+        };
 
         //Esborra un pasatger de la llista de posicions p.ex. quan ja no hi és a la terminal
-        delpospasajero = (function(req, res) {
+        delpospasajero = function(req, res) {
             pasajero.deleteOne({id_pasajero: req.params.id_pasajero}, function(error, listp){
                 res.send(listp);
             });
-        });
+        };
 
-        delnodo = (function(req, res) {
+        delnodo = function(req, res) {
             node.deleteOne({_id: req.params.nodo}, function(error, listp){
                 res.send(listp);
             });
-        });
+        };
     
         //Modifica els valors especificats d una cotxe identificada pel seu _id.
         //Els camps no especificats es mantindran igual
-        updatecoche = (function(req,res){
+        updatecoche = function(req,res){
             coche.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
                 res.send(upd);
             });
-        });
+        };
 
 
-        updatenodo = (function(req,res){
+        updatenodo = function(req,res){
             node.updateOne({nombre_nodo: req.params.nodo},{$set:req.body},{safe:true}, function(error, upd){
                 res.send(upd);
             });
-        });
+        };
 
         //Modifica els valors especificats d'una persona en llista d'espera
-        updatelista = (function(req, res){
+        updatelista = function(req, res){
             lista.updateOne({id_pasajero: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
                 res.send(upd);
             });
-        });
+        };
 
-        updatepospasajero = (function(req, res){
+        updatepospasajero = function(req, res){
             pasajero.updateOne({id_pasajero: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
                 res.send(upd);
             });
-        });
+        };
 
-        randompos = (function(req, res){
+        randompos = function(req, res){
             node.findOne({nombre_nodo: req.params.nodo},function(req, nod){
                 var lista = nod.nodos_vecinos.split(',');
                 var result = lista[Math.floor(Math.random() * lista.length)];
@@ -214,7 +220,34 @@ module.exports = function(app){
                     res.send(resp);
                 });           
             });
-        });
+        };
+
+        encochar = function(req, res){
+            var opscoche = {};
+            var opspasajero = {};
+            opscoche['id_pasajero'] = req.params.id_pasajero;
+            opscoche['estado'] = "ocupado";
+            opspasajero['coche'] = req.params.id_coche;
+            coche.updateOne({id_coche: req.params.id_coche}, opscoche, function(reqcoche, res_coche){
+                pasajero.updateOne({id_pasajero: req.params.id_pasajero}, opspasajero, function(reqpasajero, res_pasajero){
+                    res.send(res_coche);
+                });
+            });
+
+        };
+
+        desencochar = function(req, res){
+            var opscoche = {};
+            var opspasajero = {};
+            opscoche['id_pasajero'] = "";
+            opscoche['estado'] = "disponible";
+            opspasajero['coche'] = "Ninguno";
+            coche.updateOne({id_coche: req.params.id_coche}, opscoche, function(reqcoche, res_coche){
+                pasajero.updateOne({id_pasajero: req.params.id_pasajero}, opspasajero, function(reqpasajero, res_pasajero){
+                    res.send(res_coche);
+                });
+            });
+        };
 
         randomposbypass = function(req, res){
             pasajero.findOne({id_pasajero: req.params.id_pasajero}, function(error, pos){
@@ -280,7 +313,7 @@ module.exports = function(app){
                 console.log(posicion);
                 var consulta = {};
                 consulta['nombre_nodo'] = posicion;
-                if (vehiculo == 'Ningno'){
+                if (vehiculo == 'Ninguno'){
                     node.findOne(consulta,function(req, nod){
                         var lista = nod.nodos_vecinos.split(',');
                         var result = lista[Math.floor(Math.random() * lista.length)];
@@ -348,6 +381,8 @@ module.exports = function(app){
     app.get('/nodos/:nodo', findlatlong);
     app.get('/nodos/:longitud/:latitud', findnodo);
     app.get('/nodos/random/position/:id_pasajero', randomposbypass);
+    app.get('/encochar/:id_coche/:id_pasajero',encochar);
+    app.get('/desencochar/:id_coche/:id_pasajero',desencochar);
     //--------------------------------DELETE----------------
     //esborrem dades de la BDD
     app.delete('/coches/:id', delcoche);
