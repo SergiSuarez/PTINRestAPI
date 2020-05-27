@@ -266,7 +266,7 @@ npasajero = function(req, res){
 
     //Busqueda d una pasajero concreta per el seu _id
     findpasajero = function(req, res) {
-        pasajero.findOne({id_username: req.params.id}, function(error, person) {
+        pasajero.findOne({username: req.params.id}, function(error, person) {
             res.send(person);
         });
     };
