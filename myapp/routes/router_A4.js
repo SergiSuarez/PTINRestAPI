@@ -17,11 +17,7 @@ module.exports = function(app){
 //---------------Funcions
 consultaVuelos = function(req, res){
   vuelos.find({origen: req.body.origen, destino: req.body.destino, fecha: req.body.fecha_origen}, function(err,existe){
-      //if(existe==null){
-  //	res.send({"estado":"ko"});
-  //}else{
     res.send(existe);
-  //}
     });
   };
 
@@ -54,9 +50,7 @@ npasajero = function(req, res){
           intereses: req.body.intereses
       });
 	  pasajero.findOne({username: req.body.username}, function(err,existe){
-	  //res.send(existe);
 			if(existe==null){
-				console.log("Añadido Usuario:", vpasajero.id_ticket);
 				vpasajero.save();
 				res.send({"estado":"ok"});
 			}else{
@@ -78,7 +72,6 @@ npasajero = function(req, res){
             asientos_t: req.body.asientos_t,
             asientos: req.body.asientos
         });
-        console.log("Añadido Vuelo:", vvuelo.id);
         vvuelo.save();
         res.end();
     };
@@ -102,7 +95,6 @@ npasajero = function(req, res){
             maletas_checked: req.body.maletas_checked,
             estado: req.body.estado
         });
-        console.log("Añadido Billete", vbillete.id_ticket);
         vbillete.save();
         res.end();
     };
@@ -112,7 +104,6 @@ npasajero = function(req, res){
         var vinteres = new interes({
             interes: req.body.interes
         });
-        console.log("Añadido interés:", vinteres.interes);
         vinteres.save();
         res.end();
     };
@@ -130,7 +121,6 @@ npasajero = function(req, res){
             foto: req.body.foto,
             valoracion: req.body.valoracion
         });
-        console.log("Añadido Negocio: ", vnegocio.nombre);
         vnegocio.save();
         res.end();
     };
@@ -144,7 +134,6 @@ npasajero = function(req, res){
             publico: req.body.publico,
             intereses: req.body.intereses
         });
-        console.log("Añadida Oferta: ", voferta.descripcion);
         voferta.save();
         res.send();
     };
@@ -159,7 +148,6 @@ npasajero = function(req, res){
             status: req.body.status,
             caducidad: req.body.caducidad
         });
-        console.log("Añadida tarjeta: ", vtarjeta.id_card);
         vtarjeta.save();
         res.send();
     };
@@ -168,7 +156,6 @@ npasajero = function(req, res){
         var city = new ciudades({
             ciudad: req.body.ciudad
         });
-        console.log("Añadida ciudad: ", city.ciudad);
         city.save();
         res.send();
     };
@@ -202,7 +189,6 @@ npasajero = function(req, res){
 
     //Lista de tarjetas por usuario
     listtarjetasbyuser = function(req, res){
-    //    console.log("Buscando tarjeta de: ", req.params.iduser);
         tarjetas.find({id_user: req.params.iduser}, function(err, cards){
             res.send(cards);
         });
@@ -332,14 +318,11 @@ npasajero = function(req, res){
     };
 
     findvuelosbypasbyfecha = function(req,res){
-        console.log ("Buscando vuelos de:", req.params.pasajero, "en fecha", req.params.fecha);
         billete.find({
             "pasajero": req.params.pasajero,
             "fecha": req.params.fecha
         },
-        function(err, flight){
-            console.log("Flight:", flight);
-            
+        function(err, flight){           
             res.send(flight);
         });
     };
@@ -375,7 +358,6 @@ npasajero = function(req, res){
     //Esborra un pasajero donant el seu _id
 	delpasajero = function(req,res){
 		pasajero.deleteOne({_id: req.params.id}, function(error, person) {
-            console.log("Eliminado Pasajero:", req.params.id);
         	res.send(person);
         })
     };
@@ -383,7 +365,6 @@ npasajero = function(req, res){
     //Borrar vuelo por id
     delvuelo = function(req,res){
 		vuelos.deleteOne({_id: req.params.id}, function(error, flight) {
-            console.log("Eliminado Vuelo:", req.params.id);
         	res.send(flight);
         })
     };
@@ -391,7 +372,6 @@ npasajero = function(req, res){
     //Borrar tarjeta por id
     deltarjeta = function(req,res){
 		tarjetas.deleteOne({_id: req.params.id}, function(error, cards) {
-            console.log("Eliminado Pasajero:", req.params.id);
         	res.send(cards);
         })
 	};
@@ -399,7 +379,6 @@ npasajero = function(req, res){
     //Esborra un billete donant el seu _id
 	delbillete = function(req,res){
 		billete.deleteOne({_id: req.params.id}, function(error, bill) {
-            console.log("Eliminado Billete:", req.params.id);
         	res.send(bill);
         });
     };
@@ -407,7 +386,6 @@ npasajero = function(req, res){
     //Borra un interés por id
     delinteres = function(req,res){
 		interes.deleteOne({_id: req.params.id}, function(error, inte) {
-            console.log("Eliminado Interés:", req.params.id);
         	res.send(inte);
         });
     };
@@ -415,7 +393,6 @@ npasajero = function(req, res){
     //Borra un negocio por id
     delnegocios = function(req,res){
 		negocios.deleteOne({_id: req.params.id}, function(error, bizz) {
-            console.log("Eliminado Negocio:", req.params.id);
         	res.send(bizz);
         });
     };
@@ -423,7 +400,6 @@ npasajero = function(req, res){
     //Borra ofertas por id
     delofertas = function(req,res){
 		ofertas.deleteOne({_id: req.params.id}, function(error, bizz) {
-            console.log("Eliminada Oferta:", req.params.id);
         	res.send(bizz);
         });
     };
@@ -432,7 +408,6 @@ npasajero = function(req, res){
     //Els camps no especificats es mantindran igual
 	updatepasajero = function(req,res){
 		pasajero.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
-            console.log("Actualizado pasajero: ", req.params.id);
             res.send(upd);
         });
     };
@@ -440,7 +415,6 @@ npasajero = function(req, res){
     //Modifica billete por id
     updatebillete = function(req,res){
 		billete.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
-            console.log("Actualizado billete: ", req.params.id);
             res.send(upd);
         });
     };
@@ -448,7 +422,6 @@ npasajero = function(req, res){
     //Modifica interes por id
     updateinteres = function(req,res){
 		interes.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
-            console.log("Actualizado interés: ", req.params.id);
             res.send(upd);
         });
     };
@@ -456,7 +429,6 @@ npasajero = function(req, res){
     //Modifica vuelo por id
     updatevuelo = function(req,res){
 		vuelos.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
-            console.log("Actualizado vuelo: ", req.params.id);
             res.send(upd);
         });
     };
@@ -464,7 +436,6 @@ npasajero = function(req, res){
     //Modifica negocio por id
     updatenegocios = function(req,res){
 		negocios.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
-            console.log("Actualizado negocio: ", req.params.id);
             res.send(upd);
         });
     };
@@ -472,7 +443,6 @@ npasajero = function(req, res){
     //Modifica oferta por id
     updateoferta = function(req,res){
 		ofertas.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
-            console.log("Actualizada oferta: ", req.params.id);
             res.send(upd);
         });
     };
@@ -480,7 +450,6 @@ npasajero = function(req, res){
     //Modifica tarjeta por id
     updatetarjeta = function(req,res){
 		targetas.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
-            console.log("Actualizada targeta: ", req.params.id);
             res.send(upd);
         });
     };
