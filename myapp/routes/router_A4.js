@@ -325,6 +325,12 @@ npasajero = function(req, res){
         });   
     };
 
+    findbilletesbyiduser = function(req, res){
+        billete.findOne({id_user: req.params.id_user}, function(error, bill){
+            res.send(bill);
+        })
+    };
+
     findvuelosbypasbyfecha = function(req,res){
         console.log ("Buscando vuelos de:", req.params.pasajero, "en fecha", req.params.fecha);
         billete.find({
@@ -513,6 +519,7 @@ app.get('/vuelos/:origen/:destino/:fecha', listvuelosbyordestdate);
 app.get('/ofertas/:caducidad', listofertasbydate);
 app.get('/tarjetas/:iduser', listtarjetasbyuser);
 app.get('/pasajero/:id', findpasajero);
+app.get('/billetes/:id_user',findbilletesbyiduser);
 app.get('/billetes/:id', findbillete);
 app.get('/negocios/:id', findnegocios);
 app.get('/vuelos/:id', findvuelo);
