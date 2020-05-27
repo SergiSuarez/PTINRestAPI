@@ -116,7 +116,7 @@ module.exports = function(app){
         //Busquem el proper pasatger a ser recollit
         nextlista = function(req, res){
             lista.findOne(function(req, next){
-                lista.deleteOne({_id: next._id}, function(req, del){
+                lista.deleteOne({id_coche: next.id_coche}, function(req, del){
                 });
                 res.send(next);
             });
@@ -178,7 +178,7 @@ module.exports = function(app){
         //Modifica els valors especificats d una cotxe identificada pel seu _id.
         //Els camps no especificats es mantindran igual
         updatecoche = function(req,res){
-            coche.updateOne({_id: req.params.id},{$set:req.body},{safe:true}, function(error, upd){
+            coche.updateOne({id_coche: req.params.id_coche},{$set:req.body},{safe:true}, function(error, upd){
                 res.send(upd);
             });
         };
