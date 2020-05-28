@@ -73,7 +73,7 @@ npasajero = function(req, res){
             asientos: req.body.asientos
         });
         vvuelo.save();
-        res.end();
+        res.send();
     };
 
     //Nuevo billete
@@ -96,7 +96,7 @@ npasajero = function(req, res){
             estado: req.body.estado
         });
         vbillete.save();
-        res.end();
+        res.send();
     };
 
     //Nuevo interés
@@ -105,7 +105,7 @@ npasajero = function(req, res){
             interes: req.body.interes
         });
         vinteres.save();
-        res.end();
+        res.send();
     };
 
     //Nuevo negocio
@@ -122,7 +122,7 @@ npasajero = function(req, res){
             valoracion: req.body.valoracion
         });
         vnegocio.save();
-        res.end();
+        res.send();
     };
 
     //Nueva oferta
@@ -225,6 +225,19 @@ npasajero = function(req, res){
     //Lista de negocios de tipo tienda
     listtiendas = function(req, res){
         negocios.find({tipo: "Tienda"}, function(error, bizz){
+            res.send(bizz);
+        });
+    };
+
+
+    listpunts = function(req, res){
+        negocios.find({tipo: "Info"}, function(error, bizz){
+            res.send(bizz);
+        });
+    };
+
+    listvips = function(req, res){
+        negocios.find({tipo: "Vips"}, function(error, bizz){
             res.send(bizz);
         });
     };
@@ -480,6 +493,8 @@ app.get('/intereses', listinteres);
 app.get('/negocios', listnegocios);
 app.get('/negocios/restaurantes', listrestaurantes);
 app.get('/negocios/tiendas', listtiendas);
+app.get('/negocios/puntsinfo', listpunts);
+app.get('/negocios/salesvips', listvips);
 app.get('/negocios/:id/imagen', findimagennegocio);
 app.get('/ofertas', listofertas);
 app.get('/tarjetas', listtarjetas);
