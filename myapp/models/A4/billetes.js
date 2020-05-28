@@ -5,6 +5,7 @@ var BilletesSchema = new Schema({
   id_ticket: String,        //localizador del billete
   qr: String,               //ruta a la imagen del qr
   pasajero: String,         //nombre completo del pasajero
+  username: String,         //email del pasajero
   id_card: String,          //numero de tarjate de fidelidad (si la tiene)
   id_user: String,          //identificación del pasajero (DNI o Pasaporte)
   id_flight: String,        //id del vuelo

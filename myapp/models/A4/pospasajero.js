@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
     Schema   = mongoose.Schema;
  
 var PosPasajeroSchema = new Schema({
-    id_pasajero: String, //identificador del coche
+    id_pasajero: String, //email del pasajero
     latitud: Number, //latitud
     longitud: Number, //longitud
     nodo: String, //posicion en nodo

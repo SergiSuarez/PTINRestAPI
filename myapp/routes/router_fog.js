@@ -271,6 +271,7 @@ module.exports = function(app){
                         parpas['vuelo'] = "";
                         parpas['hora'] = "";
                         parpas['puerta'] = "";
+                        parpas['coche'] = "Ninguno";
                         var urlcloud = "http://localhost:3000/billetes/pasajero/"
                         //var urlcloud = "http://craaxcloud.epsevg.upc.edu:36301/billetes/pasajero/"
                         var today = new Date;
@@ -295,7 +296,6 @@ module.exports = function(app){
                             parpas['vuelo'] = data[0].id_flight;
                             parpas['hora'] = data[0].hora;
                             parpas['puerta'] = data[0].puerta;
-                            //console.log('Parpas:', parpas);
                             parpas.save();
                             res.send(parpas);
                         });
