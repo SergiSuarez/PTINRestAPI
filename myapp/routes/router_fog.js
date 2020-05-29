@@ -302,7 +302,12 @@ module.exports = function(app){
                             parpas['hora'] = data[0].hora;
                             parpas['puerta'] = data[0].puerta;
                             parpas.save();
-                            res.send(parpas);
+                            if (isEmpty(data)){
+                                res.send({"estado":"ko"});
+                            }
+                            else{
+                                res.send(parpas);
+                            }
                         });
                     });
                 });
