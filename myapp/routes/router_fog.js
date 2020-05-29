@@ -292,7 +292,7 @@ module.exports = function(app){
                         var yyyy = today.getFullYear();
                         today = yyyy+'-'+mm+'-'+dd;
                         urlcloud = urlcloud+pass+'/'+today;
-                        console.log('urlcloud:',urlcloud);
+                        //console.log('urlcloud:',urlcloud);
                         fetch(urlcloud)
                         .then((resp) => resp.json())
                             //return response.json();
