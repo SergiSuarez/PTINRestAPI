@@ -116,9 +116,14 @@ module.exports = function(app){
         //Busquem el proper pasatger a ser recollit
         nextlista = function(req, res){
             lista.findOne(function(req, next){
-                lista.deleteOne({id_coche: next.id_coche}, function(req, del){
-                });
-                res.send(next);
+                if (!isEmpty(next)){
+                    lista.deleteOne({id_coche: next.id_coche}, function(req, del){
+                        res.send(next);
+                    });
+                }
+                else{
+                    res.send('No hay más pasajeros');
+                };
             });
         };
     
