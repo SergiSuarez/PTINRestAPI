@@ -155,7 +155,7 @@ module.exports = function(app){
     
         //Esborra un cotxe donant el seu _id
         delcoche = function(req,res){
-            coche.deleteOne({_id: req.params.id}, function(error, car) {
+            coche.deleteOne({id_coche: req.params.id}, function(error, car) {
                 res.send(car);
             });
         };
