@@ -284,8 +284,8 @@ module.exports = function(app){
                         parpas['hora'] = "";
                         parpas['puerta'] = "";
                         parpas['coche'] = "Ninguno";
-                        //var urlcloud = "http://localhost:3000/billetes/pasajero/"
-                        var urlcloud = "http://craaxcloud.epsevg.upc.edu:36301/billetes/pasajero/"
+                        var urlcloud = "http://localhost:3000/billetes/pasajero/"
+                        //var urlcloud = "http://craaxcloud.epsevg.upc.edu:36301/billetes/pasajero/"
                         var today = new Date;
                         var dd = today.getDate();
                         if (dd<10){
@@ -405,7 +405,7 @@ module.exports = function(app){
     app.delete('/nodos/:nodo', delnodo);
     //--------------------------------PUT----------------
     //modifiquem dades de la BDD
-    app.put('/coches/:id',updatecoche);
+    app.put('/coches/:id_coche',updatecoche);
     app.put('/listaespera/:id',updatelista);
     app.put('/pospasajeros/:id',updatepospasajero);
     app.put('/nodos/:nodo', updatenodo);
