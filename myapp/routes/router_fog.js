@@ -22,8 +22,15 @@ module.exports = function(app){
                 estado: req.body.estado,
                 pasajero: req.body.pasajero    
             });
-            car.save();
-            res.end();
+            coche.findOne({id_coche: req.body.id_coche}, function(error, carro) {
+                if (carro==null){
+                    car.save();
+                    res.send({"estado":"ok"});
+                }
+                else{
+                    res.send({"estado":"ko"})
+                };
+            });
         };
         
         //Insertem una pasatger a la llista d'espera dels cotxes
