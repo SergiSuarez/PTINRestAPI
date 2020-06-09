@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
     Schema   = mongoose.Schema;
 
 var ListaSchema = new Schema({
-    id_pasajero: String,    //identificador del coche
+    id_pasajero: String,    //usernamev email
     vip: Boolean,           //el pasajero es vip?
     disable: Boolean,       //el pasajero es PMR?
     nodoactual: String,     //posicion actual

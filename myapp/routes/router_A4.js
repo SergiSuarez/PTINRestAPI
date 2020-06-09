@@ -297,6 +297,7 @@ npasajero = function(req, res){
 
     listanegociosporpref = function(req, res) {
         pasajero.findOne({username: req.params.username}, {intereses: true, _id: false}, function(req, inte){
+            console.log(inte);
             var lista = inte.intereses;
             negocios.find({intereses: {$in: lista}}, function(req, offers){ 
                 res.send(offers);  
