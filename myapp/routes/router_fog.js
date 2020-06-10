@@ -141,6 +141,12 @@ module.exports = function(app){
             });
         };
 
+        findcochesdisponibles = function(req, res){
+            coche.find({estado: "disponible"}, function(req, car){
+                res.send(car);
+            });
+        };
+
         findnodo = function(req, res) {
             node.findOne({nodo: req.params.nodo}, {longitud: true, latitud: true, _id:false}, function(error, nod){
                 res.send(nod);
@@ -384,6 +390,7 @@ module.exports = function(app){
     //--------------------------------GET----------------
     //Obtenim dades de la BDD
     app.get('/coches', listcoche);
+    app.get('/coches/disponibles', findcochesdisponibles);
     app.get('/listaespera', listlista);
     app.get('/listaespera/next', nextlista);
     app.get('/nodos', listnodos);
