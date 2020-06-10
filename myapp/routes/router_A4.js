@@ -32,6 +32,17 @@ consultaVuelos = function(req, res){
     });
   };
 
+login_admin = function(req, res){
+    pasajero.findOne({username: req.body.correu, password: req.body.contrasenya, perfil: "administrador"}, function(err,existe){
+        if(existe==null){
+            res.send({"estado":"ko"});
+        }
+        else{
+            res.send({"estado":"ok"});
+        }
+    });
+};
+
   //Nuevo pasajero
 npasajero = function(req, res){
 	var vpasajero = new pasajero({
@@ -484,6 +495,7 @@ app.post('/tarjetas', ntarjeta);
 app.post('/vuelos', nvuelo);
 app.post('/ciudades', nciudad);
 app.post('/login', login);
+app.post('/login/admin/', login_admin);
 app.post('/consultaVuelos', consultaVuelos);
 
 
