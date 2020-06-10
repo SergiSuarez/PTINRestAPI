@@ -343,6 +343,30 @@ npasajero = function(req, res){
         });
     };
 
+    findvuelosbyuserpreviousdate = function(req, res){
+        console.log('Buscando vuelos de: ',req.params.username,' anteriores a: ',req.params.data);
+        billete.find({
+            username: req.params.username,
+            fecha: {
+                "$lt": req.params.data
+            }
+        }, function(error, bill){
+            res.send(bill);
+        });
+    };
+
+    findvuelosbyuserfuturedate = function(req, res){
+        console.log('Buscando vuelos de: ',req.params.username,' anteriores a: ',req.params.data);
+        billete.find({
+            username: req.params.username,
+            fecha: {
+                "$gte": req.params.data
+            }
+        }, function(error, bill){
+            res.send(bill);
+        });
+    };
+
     findvuelosbypasbyfecha = function(req,res){
         billete.find({
             "username": req.params.pasajero,
@@ -518,6 +542,8 @@ app.get('/ofertas/:caducidad', listofertasbydate);
 app.get('/tarjetas/:iduser', listtarjetasbyuser);
 app.get('/pasajero/:id', findpasajero);
 app.get('/billetes/user/:username',findbilletesbyiduser);
+app.get('/billetes/anteriores/:username/:data', findvuelosbyuserpreviousdate);
+app.get('/billetes/futuros/:username/:data', findvuelosbyuserfuturedate);
 app.get('/billetes/:id', findbillete);
 app.get('/negocios/:id', findnegocios);
 app.get('/vuelos/:id', findvuelo);
