@@ -21,7 +21,8 @@ module.exports = function(app){
                 puntActual: req.body.puntActual,
                 estado: req.body.estado,
                 id_pasajero: req.body.id_pasajero,
-                ruta: req.body.ruta    
+                ruta_pasajero: req.body.ruta_pasajero,
+                ruta_desti: req.body.ruta_desti   
             });
             coche.findOne({id_coche: req.body.id_coche}, function(error, carro) {
                 if (carro==null){

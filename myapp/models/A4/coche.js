@@ -7,7 +7,8 @@ var cocheSchema = new Schema({
   puntActual: String,       //node actual 
   estado: String,           //ocupado, cargando, disponible, buscando 
   id_pasajero: String,       //identificación del pasajero 
-  ruta: String              //ruta del coche
+  ruta_pasajero: String,     //ruta del pasajero
+  ruta_desti: String         //ruta al desti
 },{collection:'coches'}); 
 
 module.exports = mongoose.model('coches', cocheSchema);
