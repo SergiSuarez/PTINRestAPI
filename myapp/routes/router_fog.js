@@ -103,6 +103,12 @@ module.exports = function(app){
             });
         };
 
+        findlistabyemail = function(req, res){
+            lista.findOne({username: req.params.username}, function(req, lis){
+                res.send(lis);
+            });
+        };
+
         //Llista de tots els passatgers i la seva posició
         listpospasajero = function(req, res){
             pasajero.find(function(req, lis){
@@ -400,6 +406,7 @@ module.exports = function(app){
     app.get('/coches', listcoche);
     app.get('/coches/disponibles', findcochesdisponibles);
     app.get('/listaespera', listlista);
+    app.get('/listaespera/byemail/:username', findlistabyemail);
     app.get('/listaespera/next', nextlista);
     app.get('/nodos', listnodos);
     app.get('/coches/:id', findcoche);
