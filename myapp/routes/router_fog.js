@@ -412,11 +412,11 @@ module.exports = function(app){
     app.get('/nodos/random/position/:id_pasajero', randomposbypass);
     app.get('/encochar/:id_coche/:id_pasajero',encochar);
     app.get('/desencochar/:id_coche/:id_pasajero',desencochar);
+    app.get('/listaespera/borrar/:username', deluserlista);
     //--------------------------------DELETE----------------
     //esborrem dades de la BDD
     app.delete('/coches/:id', delcoche);
     app.delete('/listaespera/:id', dellista);
-    app.delete('/listaespera/borrar/:username', deluserlista);
     app.delete('/pospasajeros/:id_pasajero', delpospasajero);
     app.delete('/nodos/:nodo', delnodo);
     //--------------------------------PUT----------------
