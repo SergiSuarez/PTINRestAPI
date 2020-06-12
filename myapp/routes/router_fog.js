@@ -182,6 +182,12 @@ module.exports = function(app){
             });
         };
 
+        deluserlista = function(req, res) {
+            lista.deleteOne({username: req.params.username}, function(error, listd){
+                res.send(listd);
+            });
+        };
+
         //Esborra un pasatger de la llista de posicions p.ex. quan ja no hi és a la terminal
         delpospasajero = function(req, res) {
             pasajero.deleteOne({id_pasajero: req.params.id_pasajero}, function(error, listp){
@@ -410,6 +416,7 @@ module.exports = function(app){
     //esborrem dades de la BDD
     app.delete('/coches/:id', delcoche);
     app.delete('/listaespera/:id', dellista);
+    app.delete('/listaespera/borrar/:username', deluserlista);
     app.delete('/pospasajeros/:id_pasajero', delpospasajero);
     app.delete('/nodos/:nodo', delnodo);
     //--------------------------------PUT----------------
