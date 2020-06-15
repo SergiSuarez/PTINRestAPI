@@ -149,6 +149,12 @@ module.exports = function(app){
             });
         };
 
+        findcarwithuser = function(req, res) {
+            coche.findOne({id_pasajero: req.params.username}, function(error, car) {
+                res.send(car);
+            });
+        };
+
         findcochesdisponibles = function(req, res){
             coche.find({estado: "disponible"}, function(req, car){
                 res.send(car);
@@ -405,6 +411,7 @@ module.exports = function(app){
     //Obtenim dades de la BDD
     app.get('/coches', listcoche);
     app.get('/coches/disponibles', findcochesdisponibles);
+    app.get('/cochesuser/:username', findcarwithuser);
     app.get('/listaespera', listlista);
     app.get('/listaespera/byemail/:username', findlistabyemail);
     app.get('/listaespera/next', nextlista);
