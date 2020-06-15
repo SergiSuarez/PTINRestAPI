@@ -104,7 +104,8 @@ npasajero = function(req, res){
             disable: req.body.disable,
             maletas_paid: req.body.maletas_paid,
             maletas_checked: req.body.maletas_checked,
-            estado: req.body.estado
+            estado: req.body.estado,
+            username: req.body.username
         });
         vbillete.save();
         res.send();
