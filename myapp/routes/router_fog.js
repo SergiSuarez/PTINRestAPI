@@ -168,7 +168,7 @@ module.exports = function(app){
         };
 
         findlatlong = function(req, res){
-            node.findOne({longitud: req.params.longitud, latitud: req.params.latitud}, {nodo: true, _id: false}, function(error, nod){
+            node.findOne({nombre_nodo: req.params.nodo}, function(error, nod){
                 res.send(nod);
             });
         };
@@ -421,8 +421,8 @@ module.exports = function(app){
     app.get('/pospasajeros/:id', findpasajero);
     app.get('/pospasajeros/hora/:time', listpospasajeroporhora)
     app.get('/pospasajeros/vuelo/:flight', listpospasajeroporvuelo)
-    app.get('/nodos/:nodo', findlatlong);
-    app.get('/nodos/:longitud/:latitud', findnodo);
+    app.get('/nodos/:nodo', findnodo);
+    app.get('/nodos/:longitud/:latitud', findlatlong);
     app.get('/nodos/random/position/:id_pasajero', randomposbypass);
     app.get('/encochar/:id_coche/:id_pasajero',encochar);
     app.get('/desencochar/:id_coche/:id_pasajero',desencochar);
