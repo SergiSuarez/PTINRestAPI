@@ -325,12 +325,12 @@ module.exports = function(app){
                         var yyyy = today.getFullYear();
                         today = yyyy+'-'+mm+'-'+dd;
                         urlcloud = urlcloud+pass+'/'+today;
-                        //console.log('urlcloud:',urlcloud);
+                        console.log('urlcloud:',urlcloud);
                         fetch(urlcloud)
                         .then((resp) => resp.json())
                             //return response.json();
                         .then(function(data) {
-                            //console.log('Data:', data);
+                            console.log('Data:', data);
                             parpas['vuelo'] = data[0].id_flight;
                             parpas['hora'] = data[0].hora;
                             parpas['puerta'] = data[0].puerta;
