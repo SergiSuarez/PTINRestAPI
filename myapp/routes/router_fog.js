@@ -421,7 +421,7 @@ module.exports = function(app){
     app.get('/pospasajeros/:id', findpasajero);
     app.get('/pospasajeros/hora/:time', listpospasajeroporhora)
     app.get('/pospasajeros/vuelo/:flight', listpospasajeroporvuelo)
-    app.get('/nodos/:nodo', findnodo);
+    app.get('/nodos/:nodo', findlatlog);
     app.get('/nodos/:longitud/:latitud', findlatlong);
     app.get('/nodos/random/position/:id_pasajero', randomposbypass);
     app.get('/encochar/:id_coche/:id_pasajero',encochar);
