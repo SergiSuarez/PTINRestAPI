@@ -310,8 +310,8 @@ module.exports = function(app){
                         parpas['hora'] = "";
                         parpas['puerta'] = "";
                         parpas['coche'] = "Ninguno";
-                        var urlcloud = "http://localhost:3000/billetes/pasajero/"
-                        //var urlcloud = "http://craaxcloud.epsevg.upc.edu:36301/billetes/pasajero/"
+                        //var urlcloud = "http://localhost:3000/billetes/pasajero/"
+                        var urlcloud = "http://craaxcloud.epsevg.upc.edu:36301/billetes/pasajero/"
                         var today = new Date;
                         var dd = today.getDate();
                         if (dd<10){
@@ -353,6 +353,7 @@ module.exports = function(app){
                 console.log(posicion);
                 var consulta = {};
                 consulta['nombre_nodo'] = posicion;
+                console.log(consulta);
                 if (vehiculo == 'Ninguno'){
                     node.findOne(consulta,function(req, nod){
                         var lista = nod.nodos_vecinos.split(',');
