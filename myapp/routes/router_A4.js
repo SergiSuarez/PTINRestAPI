@@ -339,7 +339,7 @@ npasajero = function(req, res){
 
     findbilletesbyiduser = function(req, res){
         console.log('username:',req.params.username);
-        billete.findOne({username: req.params.username}, function(error, bill){
+        billete.find({username: req.params.username}, function(error, bill){
             res.send(bill);
         });
     };
